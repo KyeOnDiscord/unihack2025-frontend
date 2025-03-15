@@ -2,11 +2,6 @@ import React, { useState } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import "./css/style.css"
-
-
-
-
 
 const localizer = momentLocalizer(moment);
 
@@ -15,32 +10,31 @@ function GroupCalendar({ free_times }) {
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [view, setView] = useState("month");
 
-  
   React.useEffect(() => {
     const formattedEvents = free_times.map((event, index) => {
-    let arr =  Object.keys(event.free_users)  
-    let description_add = ''
-    arr.forEach((id)=>{
-      description_add += ' ' + event.free_users[id].name + ','
-    })
-    return{
-      id: index + 1,
-      title: event.summary,
-      start: new Date(event.start_time_iso),
-      end: new Date(event.end_time_iso),
-      users: event.free_users,
-      description: "You have intersected free slots with: " + description_add, 
-    }});
+      let arr = Object.keys(event.free_users);
+      let description_add = "";
+      arr.forEach((id) => {
+        description_add += " " + event.free_users[id].name + ",";
+      });
+      return {
+        id: index + 1,
+        title: event.summary,
+        start: new Date(event.start_time_iso),
+        end: new Date(event.end_time_iso),
+        users: event.free_users,
+        description: "You have intersected free slots with: " + description_add,
+      };
+    });
     setEvents(formattedEvents);
   }, [free_times]);
 
-
   const eventStyleGetter = (event) => {
-    console.log('event', event)
+    console.log("event", event);
     const duration = moment(event.end).diff(moment(event.start), "minutes");
-    const backgroundColor = duration > 120 ? "#22aa84ab" : "#3b82f633"; 
-    const textColor = duration > 120? "#fff" : "#3b82f6"
-  return {
+    const backgroundColor = duration > 120 ? "#22aa84ab" : "#3b82f633";
+    const textColor = duration > 120 ? "#fff" : "#3b82f6";
+    return {
       style: {
         backgroundColor,
         borderRadius: "4px",
@@ -52,19 +46,27 @@ function GroupCalendar({ free_times }) {
     };
   };
 
-
   const CustomToolbar = (toolbar) => {
     return (
       <div className="rbc-toolbar" style={{ marginBottom: "20px" }}>
         {/* Navigation Buttons */}
         <span className="rbc-btn-group">
-          <button onClick={() => toolbar.onNavigate("PREV")} style={buttonStyle}>
+          <button
+            onClick={() => toolbar.onNavigate("PREV")}
+            style={buttonStyle}
+          >
             ◀
           </button>
-          <button onClick={() => toolbar.onNavigate("TODAY")} style={buttonStyle}>
+          <button
+            onClick={() => toolbar.onNavigate("TODAY")}
+            style={buttonStyle}
+          >
             Today
           </button>
-          <button onClick={() => toolbar.onNavigate("NEXT")} style={buttonStyle}>
+          <button
+            onClick={() => toolbar.onNavigate("NEXT")}
+            style={buttonStyle}
+          >
             ▶
           </button>
         </span>
@@ -135,7 +137,6 @@ function GroupCalendar({ free_times }) {
           events={events}
           view={view}
           onView={setView}
-          
           views={["month", "week", "day", "agenda"]}
           startAccessor="start"
           endAccessor="end"
@@ -143,14 +144,14 @@ function GroupCalendar({ free_times }) {
           eventPropGetter={eventStyleGetter}
           components={{
             toolbar: CustomToolbar,
-         
           }}
           style={{ height: 650, width: "75vw" }}
         />
       </div>
       {/* Event Details Modal */}
       {selectedEvent && (
-        <div className="bg-gradient-to-r from-teal-200 to-teal-500 text-white"
+        <div
+          className="bg-gradient-to-r from-teal-200 to-teal-500 text-white"
           style={{
             position: "fixed",
             top: "50%",
@@ -162,7 +163,9 @@ function GroupCalendar({ free_times }) {
             zIndex: 1000,
           }}
         >
-          <h3 className="text-lg font-semibold w-full text-center">Congratulations!</h3>
+          <h3 className="text-lg font-semibold w-full text-center">
+            Congratulations!
+          </h3>
           <p className="text-sm text-gray-600">{selectedEvent.description}</p>
           <p className="text-sm text-gray-600">
             {moment(selectedEvent.start).format("LLL")} -{" "}
