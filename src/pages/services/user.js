@@ -20,7 +20,6 @@ export async function RegisterUser(name, email) {
   let resp = await fetch(`${config.API_URL}/users`, requestOptions);
   let userId = await resp.json();
   console.log("user id is: " + userId);
-  alert("A verification email was sent to your inbox, please click it");
 }
 export async function ResetPassword(email, password) {
   // reset password

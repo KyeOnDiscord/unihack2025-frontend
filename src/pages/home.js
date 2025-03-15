@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import * as UserService from "./services/user";
+import { toast } from "react-toastify";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -32,7 +33,14 @@ export default function Home() {
 
   const handleCalLink = async (e) => {
     e.preventDefault();
-    await UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN"));
+    toast.promise(
+      UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
+      {
+        pending: "Saving calender...",
+        success: { render: "Calender saved", delay: 100 },
+        error: { render: "Calender saving error.", delay: 100 },
+      }
+    );
   };
 
   const handleCalLinkChange = (e) => {
@@ -41,9 +49,13 @@ export default function Home() {
 
   const handlePrefText = async (e) => {
     e.preventDefault();
-    await UserService.SetPreferences(
-      prefText,
-      localStorage.getItem("JWT_TOKEN")
+    toast.promise(
+      UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN")),
+      {
+        pending: "Saving preferences...",
+        success: { render: "Preferences saved", delay: 100 },
+        error: { render: "Preferences saving error.", delay: 100 },
+      }
     );
   };
 
