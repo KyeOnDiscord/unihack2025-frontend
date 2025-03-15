@@ -46,11 +46,11 @@ export default function Home() {
 
   const handlePrefText = async (e) => {
     e.preventDefault();
-    await UserService.SetPreferences(calLink, localStorage.getItem("JWT_TOKEN"));
+    await UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN"));
   };
 
   const handlePrefTextChange = (e) => {
-    setCalLink(e.target.value);
+    setPrefText(e.target.value);
   };
 
   const style = { backgroundColor: "#004185" };
