@@ -19,18 +19,16 @@ async function getEvents() {
   let events = [];
   let i = 0;
 
-  calender_data.events.forEach((x) => {
-    if (i < 10) {
-      i++;
-      events.push({
-        id: i,
-        title: x.summary,
-        start: new Date(x.start_time_iso),
-        end: new Date(x.end_time_iso),
-        // description: "Discuss project updates",
-      });
-    }
-  });
+  for (const x of calender_data.events) {
+    i++;
+    events.push({
+      id: i,
+      title: x.summary,
+      start: new Date(x.start_time_iso*1000),
+      end: new Date(x.end_time_iso*1000),
+      description: x.summary,
+    });
+  }
   console.log("events array:");
   console.log(events);
   return events;
@@ -38,7 +36,7 @@ async function getEvents() {
 
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
-  const [yayevents, setevents] = useState([]);
+  const [events, setEvents] = useState([]);
   const [calLink, setCalLink] = useState("");
   const [prefText, setPrefText] = useState("");
   const [instructIsVisible, setInstructIsVisible] = useState(false);
@@ -53,14 +51,12 @@ export default function Home() {
         .then(async (x) => {
           console.log(x);
           setdisplayName(x.name);
-          setevents(await getEvents());
-          console.log("stringgg");
-          console.log(JSON.stringify(yayevents));
+          setEvents(await getEvents());
         })
         .catch((x) => {
           alert(x);
-          // alert("You are not logged in, please log in");
-          // window.location.href = "/login";
+          alert("You are not logged in, please log in");
+          window.location.href = "/login";
         });
     }
   }, []);
