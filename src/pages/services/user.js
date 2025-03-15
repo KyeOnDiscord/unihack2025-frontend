@@ -81,3 +81,35 @@ export async function me(token) {
     return null;
   }
 }
+
+//("ResetPassword in here");
+export async function ResetPassword(email) {
+  const url = `${config.API_URL}/users/account/reset-password`;
+  const headers = {
+    Accept: "application/json",
+    Authorization: config.INTERFACE_API_KEY,
+    "Content-Type": "application/x-www-form-urlencoded",
+  };
+
+  const data = new URLSearchParams({
+    grant_type: "password",
+    username: email,
+    password: "abc",
+    scope: "",
+    client_id: "string",
+    client_secret: "string",
+  });
+
+  fetch(url, {
+    method: "POST",
+    headers: headers,
+    body: data,
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log("Success:", data);
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
