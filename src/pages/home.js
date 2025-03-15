@@ -22,9 +22,9 @@ async function getEvents() {
     events.push({
       id: i,
       title: x.summary,
-      start: new Date(x.start_time_iso*1000),
-      end: new Date(x.end_time_iso*1000),
-      description: "" // x.summary,
+      start: new Date(x.start_time_iso * 1000),
+      end: new Date(x.end_time_iso * 1000),
+      description: "", // x.summary,
     });
   }
   console.log("events array:");
@@ -49,7 +49,7 @@ export default function Home() {
         .then(async (x) => {
           console.log(x);
           setdisplayName(x.name);
-          setCalLink(x.calender_ics_link);  
+          setCalLink(x.calender_ics_link);
           setPrefText(x.preferences);
           setEvents(await getEvents());
         })
@@ -58,7 +58,7 @@ export default function Home() {
           alert("You are not logged in, please log in");
           window.location.href = "/login";
         });
-      
+
       toast.promise(userPromise, {
         pending: "Loading user data...",
         success: { render: "User data loaded. ✅", delay: 100 },
@@ -122,28 +122,27 @@ export default function Home() {
 
   const eventPropGetter = (event) => {
     let style = {
-      color: 'white',
-      fontWeight: 'bold',
-      fontSize: '12px',
-      padding: '5px',
-      fontFamily: 'Arial',
+      color: "white",
+      fontWeight: "bold",
+      fontSize: "12px",
+      padding: "5px",
+      fontFamily: "Arial",
     };
-  
+
     // Apply styles based on event title
     if (event.title.includes("Seminar")) {
-      style.backgroundColor = '#4CAF50';
-      style.border = '2px solid #388E3C';
+      style.backgroundColor = "#4CAF50";
+      style.border = "2px solid #388E3C";
     } else if (event.title.includes("Applied")) {
-      style.backgroundColor = '#2196F3';
-      style.border = '2px solid #1976D2';
+      style.backgroundColor = "#2196F3";
+      style.border = "2px solid #1976D2";
     } else if (event.title.includes("Workshop")) {
-      style.backgroundColor = '#FF9800';
-      style.border = '2px solid #F57C00';
+      style.backgroundColor = "#FF9800";
+      style.border = "2px solid #F57C00";
     } else {
-      style.backgroundColor = '#607D8B';
-      style.border = '2px solid #455A64';
+      style.backgroundColor = "#607D8B";
+      style.border = "2px solid #455A64";
     }
-
 
     return {
       style: style,
@@ -199,7 +198,7 @@ export default function Home() {
               onSelectEvent={(event) => setSelectedEvent(event)}
               className="w-full"
               defaultView="week"
-              style={{ height: 800}}
+              style={{ height: 800 }}
               eventPropGetter={eventPropGetter}
               min={new Date(2025, 2, 16, 8, 0)}
               max={new Date(2025, 2, 16, 20, 0)}
