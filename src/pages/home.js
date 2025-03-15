@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import * as UserService from "./services/user";
+import { toast } from 'react-toastify';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -37,8 +38,13 @@ export default function Home() {
 
   const handleCalLink = async (e) => {
     e.preventDefault();
-    await UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN"));
-    alert("You have saved your calendar link");
+    toast.promise(UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
+      {
+        pending: 'Saving calender...',
+        success: { render: 'Calender saved', delay: 100 },
+        error: { render: 'Calender saving error.', delay: 100 },
+      }
+    );
   };
 
   const handleCalLinkChange = (e) => {
@@ -47,8 +53,13 @@ export default function Home() {
 
   const handlePrefText = async (e) => {
     e.preventDefault();
-    await UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN"));
-    alert("You have saved your preferences");
+    toast.promise(UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN")),
+      { 
+        pending: 'Saving preferences...',
+        success: { render: 'Preferences saved', delay: 100 },
+        error: { render: 'Preferences saving error.', delay: 100 },
+      }
+    );
   };
 
   const handlePrefTextChange = (e) => {
