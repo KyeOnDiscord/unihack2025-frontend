@@ -1,6 +1,4 @@
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import { Geist, Geist_Mono } from "next/font/google";
 import * as UserService from "./services/user";
 import { toast } from "react-toastify";
 
@@ -47,10 +45,12 @@ export default function Home() {
       alert("You are not logged in, please log in");
       window.location.href = "/login";
     } else {
-      UserService.me(token)
+      const userPromise = UserService.me(token)
         .then(async (x) => {
           console.log(x);
           setdisplayName(x.name);
+          setCalLink(x.calender_ics_link);  
+          setPrefText(x.preferences);
           setEvents(await getEvents());
         })
         .catch((x) => {
@@ -58,6 +58,12 @@ export default function Home() {
           alert("You are not logged in, please log in");
           window.location.href = "/login";
         });
+      
+      toast.promise(userPromise, {
+        pending: "Loading user data...",
+        success: { render: "User data loaded. ✅", delay: 100 },
+        error: { render: "User data loading error. ❌", delay: 100 },
+      });
     }
   }, []);
 
@@ -177,7 +183,8 @@ export default function Home() {
               startAccessor="start"
               endAccessor="end"
               onSelectEvent={(event) => setSelectedEvent(event)}
-              style={{ height: 400, width: "75vw" }}
+              className="w-full"
+              style={{ height: 800}}
             />
             {/* Popup Modal */}
             {selectedEvent && (
@@ -229,6 +236,7 @@ export default function Home() {
                 type="url"
                 placeholder="https://my-timetable.monash.edu/..."
                 class="flex-1 px-4 py-2 outline-none"
+                value={calLink}
                 onChange={handleCalLinkChange}
               />
               <button
@@ -295,6 +303,7 @@ export default function Home() {
               placeholder="Tell us a little about yourself, your interests and hobbies etc."
               className="w-full px-4 py-4 outline-none resize-none" // Make sure textarea spans full width
               onChange={handlePrefTextChange}
+              value={prefText}
               rows="4" // Adjust the height (number of visible rows) for the text box
             />
             <button
