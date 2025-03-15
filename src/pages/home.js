@@ -68,9 +68,10 @@ export default function Home() {
   let events = [
     {
       id: 1,
-      title: "DTS STARTS",
+      title: "event 1",
       start: new Date(2025, 3, 1, 0, 0, 0),
       end: new Date(2025, 3, 2, 0, 0, 0),
+      description: "Discuss project updates",
     },
 
     {
@@ -80,7 +81,7 @@ export default function Home() {
       end: new Date(2025, 4, 10, 0, 0, 0),
     },
   ];
-
+  const [selectedEvent, setSelectedEvent] = useState(null);
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen">
       <title>AllocateUs - Home</title>
@@ -144,14 +145,56 @@ export default function Home() {
           </a>
         </div>
         <br />
+
         <div>
           <Calendar
             localizer={localizer}
             events={events}
             startAccessor="start"
             endAccessor="end"
+            onSelectEvent={(event) => setSelectedEvent(event)}
             style={{ height: 400, width: "75vw" }}
           />
+          {/* Popup Modal */}
+          {selectedEvent && (
+            <div
+              style={{
+                position: "fixed",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)",
+                backgroundColor: "white",
+                padding: "20px",
+                borderRadius: "10px",
+                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                zIndex: 1000,
+              }}
+            >
+              <h3>{selectedEvent.title}</h3>
+              <p>{selectedEvent.description}</p>
+              <p>
+                {moment(selectedEvent.start).format("LLL")} -{" "}
+                {moment(selectedEvent.end).format("LLL")}
+              </p>
+              <button onClick={() => setSelectedEvent(null)}>Close</button>
+            </div>
+          )}
+
+          {/* Overlay to close modal when clicking outside */}
+          {selectedEvent && (
+            <div
+              onClick={() => setSelectedEvent(null)}
+              style={{
+                position: "fixed",
+                top: 0,
+                left: 0,
+                width: "100%",
+                height: "100%",
+                backgroundColor: "rgba(0, 0, 0, 0.3)",
+                zIndex: 999,
+              }}
+            />
+          )}
         </div>
       </section>
     </div>
