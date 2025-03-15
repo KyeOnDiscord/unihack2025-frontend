@@ -2,17 +2,12 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import * as UserService from "./services/user";
-import { toast } from 'react-toastify';
+import { toast } from "react-toastify";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+import { Calendar, momentLocalizer } from "react-big-calendar";
+import moment from "moment";
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+const localizer = momentLocalizer(moment);
 
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
@@ -38,11 +33,12 @@ export default function Home() {
 
   const handleCalLink = async (e) => {
     e.preventDefault();
-    toast.promise(UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
+    toast.promise(
+      UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
       {
-        pending: 'Saving calender...',
-        success: { render: 'Calender saved', delay: 100 },
-        error: { render: 'Calender saving error.', delay: 100 },
+        pending: "Saving calender...",
+        success: { render: "Calender saved", delay: 100 },
+        error: { render: "Calender saving error.", delay: 100 },
       }
     );
   };
@@ -53,11 +49,12 @@ export default function Home() {
 
   const handlePrefText = async (e) => {
     e.preventDefault();
-    toast.promise(UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN")),
-      { 
-        pending: 'Saving preferences...',
-        success: { render: 'Preferences saved', delay: 100 },
-        error: { render: 'Preferences saving error.', delay: 100 },
+    toast.promise(
+      UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN")),
+      {
+        pending: "Saving preferences...",
+        success: { render: "Preferences saved", delay: 100 },
+        error: { render: "Preferences saving error.", delay: 100 },
       }
     );
   };
@@ -67,6 +64,22 @@ export default function Home() {
   };
 
   const style = { backgroundColor: "#004185" };
+
+  let events = [
+    {
+      id: 1,
+      title: "DTS STARTS",
+      start: new Date(2025, 3, 1, 0, 0, 0),
+      end: new Date(2025, 3, 2, 0, 0, 0),
+    },
+
+    {
+      id: 2,
+      title: "DTS STARTS",
+      start: new Date(2025, 4, 1, 0, 0, 0),
+      end: new Date(2025, 4, 10, 0, 0, 0),
+    },
+  ];
 
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen">
@@ -129,6 +142,16 @@ export default function Home() {
           >
             See Rooms
           </a>
+        </div>
+        <br />
+        <div>
+          <Calendar
+            localizer={localizer}
+            events={events}
+            startAccessor="start"
+            endAccessor="end"
+            style={{ height: 400, width: "75vw" }}
+          />
         </div>
       </section>
     </div>
