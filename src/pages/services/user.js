@@ -40,3 +40,25 @@ export async function RegisterUser(name, email, password) {
     return passwordResetResp.ok;
   }
 }
+
+export async function LoginUser(email, password) {
+  let loginReq = {
+    method: "POST",
+    headers: {
+      Authorization: config.INTERFACE_API_KEY,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+
+    body: `username=${email}&password=${password}`,
+    redirect: "follow",
+  };
+  let resp = await fetch(`${config.API_URL}/token`, loginReq);
+  if (resp.ok) {
+    let data = await resp.json();
+    config.JWT_TOKEN = data.access_token;
+    return true;
+  } else {
+    alert("Login credentials incorrect");
+    return false;
+  }
+}

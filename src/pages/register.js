@@ -102,6 +102,12 @@ export default function SignUpForm() {
             </button>
           </div>
         </form>
+        <p>
+          Already have an account? Login{" "}
+          <a href={"/login"} style={{ color: "blue" }}>
+            here
+          </a>
+        </p>
       </div>
     </div>
   );

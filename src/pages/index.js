@@ -48,6 +48,21 @@ export default function Home() {
           </p>
         </div>
       </section>
+      <section className="text-center">
+        <a href={`/login`}>
+          <button
+            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 m-5"
+            href="/login"
+          >
+            Login
+          </button>
+        </a>
+        <a href={`/registe`}>
+          <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
+            Register
+          </button>
+        </a>
+      </section>
     </div>
   );
 }
