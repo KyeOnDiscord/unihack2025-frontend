@@ -1,61 +1,103 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
+import { useState, useEffect } from "react";
+import * as UserService from "./services/user";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
-export default function Home() {
-  if (typeof window !== "undefined") {
-    const value = localStorage.getItem("JWT_TOKEN");
-    if (value == null) {
-      alert("You are not logged in, please log in");
-      window.location.href = "/login";
+function getEmailFromJWT(token) {
+  try {
+    // Split the token into its parts
+    const parts = token.split(".");
+    if (parts.length < 2) {
+      throw new Error("Invalid JWT token");
     }
+
+    // Decode the first part (header or payload depending on format)
+    const payload = JSON.parse(atob(parts[0]));
+
+    // Return the email field if it exists
+    return payload.email || "Email not found";
+  } catch (error) {
+    console.error("Error decoding JWT:", error.message);
+    return null;
   }
+}
+
+export default function Verify() {
+  const [email, setemail] = useState("...");
+
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // Handle form submission (e.g., send data to API)
+    // console.log(formData);
+    // console.log(config.API_URL);
+
+    await UserService.ResetPassword(formData.email, formData.password);
+  };
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const jwt_token = urlParams.get("token");
+
+    console.log(jwt_token);
+    let email = getEmailFromJWT(jwt_token);
+    if (email != null) {
+      setemail(email);
+    } else {
+      alert("Something went wrong");
+    }
+  }, []);
 
   const style = { backgroundColor: "#004185" };
-
   return (
-    <div className="bg-gray-50 text-gray-900 min-h-screen">
-      <title>AllocateUs - Home</title>
-      <meta
-        name="description"
-        content="A calendar to sync schedules with friends"
-      />
-      <link rel="icon" href="/favicon.ico" />
+    <div className="flex justify-center items-center min-h-screen dots-background">
+      <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
+        <h1 className="text-3xl font-bold text-left text-gray-700">
+          AllocateUs
+        </h1>
+        <br />
+        <h3 className="text-l text-center text-gray-500">
+          Set password for the email: {email}
+        </h3>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700"
+            >
+              Password
+            </label>
+            <input
+              type="password"
+              name="password"
+              id="password"
+              value={formData.password}
+              onChange={handleChange}
+              required
+              className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
 
-      <header className="text-white py-12" style={style}>
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h1 className="text-4xl sm:text-6xl font-bold mb-4">AllocateUs</h1>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            A calendar to make groups to sync schedules with uni friends
-          </p>
-        </div>
-      </header>
-
-      <section className="py-16 ">
-        <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-semibold mb-6">Welcome</h2>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            People create their own profile and upload their calendar (.ics)
-            from Allocate+. Users can join or create a group. Up to 10 people
-            can join a group, and their schedules can be synced. Within the
-            rooms, users can view other people&apos;s calendars.
-          </p>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            People can put their hobbies and interests on their profile, and AI
-            can suggest activities for groups of people depending on their
-            interests.
-          </p>
-        </div>
-      </section>
+          <div>
+            <button
+              type="submit"
+              className="w-full py-3 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              Set Password
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 }

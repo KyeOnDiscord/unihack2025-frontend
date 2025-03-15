@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
-
+import Navbar from "../components/navbar";
 import * as UserService from "./services/user";
 
 const geistSans = Geist({
@@ -23,9 +23,14 @@ export default function Home() {
       alert("You are not logged in, please log in");
       window.location.href = "/login";
     } else {
-      UserService.me(token).then((x) => {
-        setdisplayName(x.name);
-      });
+      UserService.me(token)
+        .then((x) => {
+          setdisplayName(x.name);
+        })
+        .catch((x) => {
+          alert("You are not logged in, please log in");
+          window.location.href = "/login";
+        });
     }
   }, []);
 
@@ -43,6 +48,7 @@ export default function Home() {
       <header className="text-white py-12" style={style}>
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h1 className="text-4xl sm:text-6xl font-bold mb-4">AllocateUs</h1>
+
           <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
             A calendar to make groups to sync schedules with uni friends
           </p>
