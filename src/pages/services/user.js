@@ -97,3 +97,19 @@ export async function SetCalendar(calendar_url, bearer) {
   );
   return resp.ok;
 }
+
+export async function SetPreferences(preferences, bearer) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${bearer}`,
+    },
+    redirect: "follow",
+  };
+
+  let resp = await fetch(
+    `${config.API_URL}/users/preferences/?preferences=${preferences}`,
+    requestOptions
+  );
+  return resp.ok;
+}

@@ -15,7 +15,8 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
-  const [cal_link, setCalLink] = useState("");
+  const [calLink, setCalLink] = useState("");
+  const [prefText, setPrefText] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("JWT_TOKEN");
@@ -36,10 +37,19 @@ export default function Home() {
 
   const handleCalLink = async (e) => {
     e.preventDefault();
-    await UserService.SetCalendar(cal_link, localStorage.getItem("JWT_TOKEN"));
+    await UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN"));
   };
 
   const handleCalLinkChange = (e) => {
+    setCalLink(e.target.value);
+  };
+
+  const handlePrefText = async (e) => {
+    e.preventDefault();
+    await UserService.SetPreferences(calLink, localStorage.getItem("JWT_TOKEN"));
+  };
+
+  const handlePrefTextChange = (e) => {
     setCalLink(e.target.value);
   };
 
@@ -65,7 +75,7 @@ export default function Home() {
       </header>
 
       <section className="py-16 ">
-        <div className="max-w-7xl mx-auto px-6 text-center">
+        <div className="max-w-7xl mx-auto px-6 space-y-5 text-center">
           <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
 
           <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-20">
@@ -84,7 +94,28 @@ export default function Home() {
             </button>
           </div>
 
-          <a href={"/rooms"}>See rooms</a>
+          <div className="w-full flex flex-col items-center border border-gray-300 rounded-md overflow-hidden">
+            <textarea
+              placeholder="Tell us a little about yourself, your interests and hobbies etc."
+              className="w-full px-4 py-4 outline-none resize-none" // Make sure textarea spans full width
+              onChange={handlePrefTextChange}
+              rows="4" // Adjust the height (number of visible rows) for the text box
+            />
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white px-6 py-3 mt-4 hover:bg-blue-600 transition-colors"
+              onClick={handlePrefText}
+            >
+              Set Preferences
+            </button>
+          </div>
+
+          <a
+            href="/rooms"
+            className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+          >
+            See Rooms
+          </a>
         </div>
       </section>
     </div>
