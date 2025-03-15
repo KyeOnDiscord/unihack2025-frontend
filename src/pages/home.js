@@ -104,7 +104,67 @@ export default function Home() {
 
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 space-y-5 text-center">
-          <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
+          <h2 className="text-3xl font-semibold mb-6">
+            Welcome {displayName}
+            <a
+              href="/rooms"
+              className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+            >
+              See Rooms
+            </a>
+          </h2>
+          
+
+          <div className="flex justify-center mt-12">
+            <Calendar
+              localizer={localizer}
+              events={events}
+              startAccessor="start"
+              endAccessor="end"
+              onSelectEvent={(event) => setSelectedEvent(event)}
+              style={{ height: 400, width: "75vw" }}
+            />
+            {/* Popup Modal */}
+            {selectedEvent && (
+              <div
+                style={{
+                  position: "fixed",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  backgroundColor: "white",
+                  padding: "20px",
+                  borderRadius: "10px",
+                  boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                  zIndex: 1000,
+                }}
+              >
+                <h3>{selectedEvent.title}</h3>
+                <p>{selectedEvent.description}</p>
+                <p>
+                  {moment(selectedEvent.start).format("LLL")} -{" "}
+                  {moment(selectedEvent.end).format("LLL")}
+                </p>
+                <button type="submit" onClick={() => setSelectedEvent(null)}>Close</button>
+              </div>
+            )}
+
+            {/* Overlay to close modal when clicking outside */}
+            {selectedEvent && (
+              <div
+                onClick={() => setSelectedEvent(null)}
+                style={{
+                  position: "fixed",
+                  top: 0,
+                  left: 0,
+                  width: "100%",
+                  height: "100%",
+                  backgroundColor: "rgba(0, 0, 0, 0.3)",
+                  zIndex: 999,
+                }}
+              />
+            )}
+          </div>
 
           <div class="w-full flex flex-col items-start p-2">
             <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden">
@@ -189,65 +249,8 @@ export default function Home() {
             </button>
           </div>
 
-          <a
-            href="/rooms"
-            className="bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
-          >
-            See Rooms
-          </a>
         </div>
         <br />
-
-        <div>
-          <Calendar
-            localizer={localizer}
-            events={events}
-            startAccessor="start"
-            endAccessor="end"
-            onSelectEvent={(event) => setSelectedEvent(event)}
-            style={{ height: 400, width: "75vw" }}
-          />
-          {/* Popup Modal */}
-          {selectedEvent && (
-            <div
-              style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                backgroundColor: "white",
-                padding: "20px",
-                borderRadius: "10px",
-                boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                zIndex: 1000,
-              }}
-            >
-              <h3>{selectedEvent.title}</h3>
-              <p>{selectedEvent.description}</p>
-              <p>
-                {moment(selectedEvent.start).format("LLL")} -{" "}
-                {moment(selectedEvent.end).format("LLL")}
-              </p>
-              <button onClick={() => setSelectedEvent(null)}>Close</button>
-            </div>
-          )}
-
-          {/* Overlay to close modal when clicking outside */}
-          {selectedEvent && (
-            <div
-              onClick={() => setSelectedEvent(null)}
-              style={{
-                position: "fixed",
-                top: 0,
-                left: 0,
-                width: "100%",
-                height: "100%",
-                backgroundColor: "rgba(0, 0, 0, 0.3)",
-                zIndex: 999,
-              }}
-            />
-          )}
-        </div>
       </section>
     </div>
   );
