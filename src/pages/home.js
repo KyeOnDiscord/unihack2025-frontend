@@ -75,7 +75,7 @@ export default function Home() {
   const handleCalLink = async (e) => {
     e.preventDefault();
     if (!calLink.startsWith("https://")) {
-      toast("That's not a valid calendar url!");
+      toast.error("That's not a valid calendar url!");
     } else {
       toast.promise(
         UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
