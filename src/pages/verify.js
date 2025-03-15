@@ -42,7 +42,7 @@ export default function Verify() {
     // console.log(formData);
     // console.log(config.API_URL);
 
-    await UserService.ResetPassword(formData.email, formData.password);
+    await UserService.ResetPassword(email, formData.password);
   };
 
   useEffect(() => {

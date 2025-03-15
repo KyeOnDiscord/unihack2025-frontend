@@ -1,4 +1,3 @@
-import Link from "next/link";
 import * as config from "../../config";
 
 export async function RegisterUser(name, email) {
@@ -25,7 +24,7 @@ export async function RegisterUser(name, email) {
 }
 export async function ResetPassword(email, password) {
   // reset password
-  let passwordResetReq = {
+  let requestOptions = {
     method: "POST",
     headers: {
       Authorization: config.INTERFACE_API_KEY,
@@ -35,10 +34,13 @@ export async function ResetPassword(email, password) {
     body: `username=${email}&password=${password}`,
     redirect: "follow",
   };
+  console.log(requestOptions);
   let passwordResetResp = await fetch(
     `${config.API_URL}/users/account/reset-password`,
-    passwordResetReq
+    requestOptions
   );
+  console.log("abc");
+  console.log(passwordResetResp);
   return passwordResetResp.ok;
 }
 export async function LoginUser(email, password) {
@@ -78,57 +80,4 @@ export async function me(token) {
   } else {
     throw "Invalid Token";
   }
-}
-
-//("ResetPassword in here");
-// export async function ResetPassword(email) {
-//   const url = `${config.API_URL}/users/account/reset-password`;
-//   const headers = {
-//     Accept: "application/json",
-//     Authorization: config.INTERFACE_API_KEY,
-//     "Content-Type": "application/x-www-form-urlencoded",
-//   };
-
-//   const data = new URLSearchParams({
-//     grant_type: "password",
-//     username: email,
-//     password: "abc",
-//     scope: "",
-//     client_id: "string",
-//     client_secret: "string",
-//   });
-
-//   fetch(url, {
-//     method: "POST",
-//     headers: headers,
-//     body: data,
-//   })
-//     .then((response) => response.json())
-//     .then((data) => {
-//       console.log("Success:", data);
-//     })
-//     .catch((error) => {
-//       console.error("Error:", error);
-//     });
-// }
-
-export async function FindRoom(roomId) {
-  const url = `${config.API_URL}/rooms/${roomId}`;
-  const headers = {
-    Accept: "application/json",
-    Authorization: config.INTERFACE_API_KEY,
-    "Content-Type": "application/x-www-form-urlencoded",
-  };
-
-  fetch(url, {
-    method: "GET",
-    headers: headers,
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
 }
