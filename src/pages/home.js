@@ -24,7 +24,7 @@ async function getEvents() {
       title: x.summary,
       start: new Date(x.start_time_iso*1000),
       end: new Date(x.end_time_iso*1000),
-      description: x.summary,
+      description: "" // x.summary,
     });
   }
   console.log("events array:");
@@ -120,6 +120,24 @@ export default function Home() {
 
   const style = { backgroundColor: "#004185" };
 
+  const eventPropGetter = (event) => {
+    let style = {
+      color: 'white', // Text color
+      fontWeight: 'bold', // Font weight
+      fontSize: '12px', // Font size
+      padding: '5px', // Padding inside event box
+    };
+
+    // You can also customize styles based on event data
+    if (event.title === 'Lunch Break') {
+      style.backgroundColor = '#8fbc8f';
+    }
+
+    return {
+      style: style,
+    };
+  };
+
   // events = [
   //   {
   //     id: 1,
@@ -184,7 +202,11 @@ export default function Home() {
               endAccessor="end"
               onSelectEvent={(event) => setSelectedEvent(event)}
               className="w-full"
+              defaultView="week"
               style={{ height: 800}}
+              eventPropGetter={eventPropGetter}
+              min={new Date(2025, 2, 16, 8, 0)}
+              max={new Date(2025, 2, 16, 20, 0)}
             />
             {/* Popup Modal */}
             {selectedEvent && (
