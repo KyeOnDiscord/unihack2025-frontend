@@ -70,10 +70,6 @@ export default function RoomsPage() {
     });
   };
 
-  const visitRoom = (roomId) => {
-    router.push(`/room?room_id=${roomId}`); // Navigates to /room/{roomId}
-  };
-
   const leaveRoom = async (roomId) => {
     const leaveRoomPromise = RoomService.leaveRoom(roomId, localStorage.getItem("JWT_TOKEN"))
     .then((roomData) => {
