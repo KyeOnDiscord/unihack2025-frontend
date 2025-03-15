@@ -94,7 +94,10 @@ export async function SetCalendar(calendar_url, bearer) {
     `${config.API_URL}/users/calender/?calender_ics_link=${calendar_url}`,
     requestOptions
   );
-  return resp.ok;
+  if (resp.ok) return true;
+  else {
+    throw "Calendar link was invalid";
+  }
 }
 
 export async function GetCalendar(bearer) {
@@ -126,7 +129,7 @@ export async function SetPreferences(preferences, bearer) {
   return resp.ok;
 }
 
-export async function GetFreeNames(array){
+export async function GetFreeNames(array) {
   const requestOptions = {
     method: "GET",
     headers: {
@@ -134,17 +137,14 @@ export async function GetFreeNames(array){
     },
     redirect: "follow",
   };
-  let resp_arr = []
-  array.forEach(async (el)=>{
+  let resp_arr = [];
+  array.forEach(async (el) => {
     let resp = await fetch(
       `${config.API_URL}/users/by-uuid/${el}`,
       requestOptions
-
     );
-    resp_arr.push(resp.name)
-
-  })
-  console.log(resp_arr)
+    resp_arr.push(resp.name);
+  });
+  console.log(resp_arr);
   return resp_arr;
-
 }
