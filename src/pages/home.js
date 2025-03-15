@@ -122,16 +122,28 @@ export default function Home() {
 
   const eventPropGetter = (event) => {
     let style = {
-      color: 'white', // Text color
-      fontWeight: 'bold', // Font weight
-      fontSize: '12px', // Font size
-      padding: '5px', // Padding inside event box
+      color: 'white',
+      fontWeight: 'bold',
+      fontSize: '12px',
+      padding: '5px',
+      fontFamily: 'Arial',
     };
-
-    // You can also customize styles based on event data
-    if (event.title === 'Lunch Break') {
-      style.backgroundColor = '#8fbc8f';
+  
+    // Apply styles based on event title
+    if (event.title.includes("Seminar")) {
+      style.backgroundColor = '#4CAF50';
+      style.border = '2px solid #388E3C';
+    } else if (event.title.includes("Applied")) {
+      style.backgroundColor = '#2196F3';
+      style.border = '2px solid #1976D2';
+    } else if (event.title.includes("Workshop")) {
+      style.backgroundColor = '#FF9800';
+      style.border = '2px solid #F57C00';
+    } else {
+      style.backgroundColor = '#607D8B';
+      style.border = '2px solid #455A64';
     }
+
 
     return {
       style: style,
