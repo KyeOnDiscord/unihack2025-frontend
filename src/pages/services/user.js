@@ -81,3 +81,19 @@ export async function me(token) {
     throw "Invalid Token";
   }
 }
+
+export async function SetCalendar(calendar_url, bearer) {
+  const requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${bearer}`,
+    },
+    redirect: "follow",
+  };
+
+  let resp = await fetch(
+    `${config.API_URL}/users/calender/?calender_ics_link=${calendar_url}`,
+    requestOptions
+  );
+  return resp.ok;
+}

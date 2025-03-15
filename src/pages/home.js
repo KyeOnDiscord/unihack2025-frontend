@@ -15,6 +15,7 @@ const geistMono = Geist_Mono({
 
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
+  const [cal_link, setCalLink] = useState("");
 
   useEffect(() => {
     const token = localStorage.getItem("JWT_TOKEN");
@@ -32,6 +33,15 @@ export default function Home() {
         });
     }
   }, []);
+
+  const handleCalLink = async (e) => {
+    e.preventDefault();
+    await UserService.SetCalendar(cal_link, localStorage.getItem("JWT_TOKEN"));
+  };
+
+  const handleCalLinkChange = (e) => {
+    setCalLink(e.target.value);
+  };
 
   const style = { backgroundColor: "#004185" };
 
@@ -57,6 +67,23 @@ export default function Home() {
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
+
+          <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-20">
+            <input
+              type="url"
+              placeholder="https://my-timetable.monash.edu/..."
+              class="flex-1 px-4 py-2 outline-none "
+              onChange={handleCalLinkChange}
+            />
+            <button
+              type="submit"
+              class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+              onClick={handleCalLink}
+            >
+              Set Calendar Link
+            </button>
+          </div>
+
           <a href={"/rooms"}>See rooms</a>
         </div>
       </section>
