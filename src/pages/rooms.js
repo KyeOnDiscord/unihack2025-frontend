@@ -142,14 +142,14 @@ export default function RoomsPage() {
                 </span>
                 <div className="flex gap-2">
                   <a
-                    className="bg-green-500 text-white px-4 py-2 hover:bg-green-600 transition-colors"
+                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
                     href={`/room?id=${room._id}`}
                   >
-                    Visit
+                    View
                   </a>
                   <button
                     type="submit"
-                    className="bg-red-500 text-white px-4 py-2 hover:bg-red-600 transition-colors"
+                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
                     onClick={() => leaveRoom(room._id)}
                   >
                     Leave
