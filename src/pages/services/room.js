@@ -79,3 +79,23 @@ export async function leaveRoom(roomId, bearer) {
     return await resp.json();
   }
 }
+
+export async function displayRoom(roomId, bearer){
+  const url = `${config.API_URL}/rooms/${roomId}/calenders`;
+  const headers = {
+    Accept: "application/json",
+    Authorization: "Bearer " + bearer,
+  };
+  try{
+    const resp = await fetch(url, {
+      method: "GET",
+      headers: headers,
+    });
+    if (resp.ok) {
+     
+      let answer = await resp.json()
+      return answer
+    }
+  }catch{
+    console.log("something went wrong..")
+  }}

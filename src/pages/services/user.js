@@ -125,3 +125,26 @@ export async function SetPreferences(preferences, bearer) {
   );
   return resp.ok;
 }
+
+export async function GetFreeNames(array){
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: config.INTERFACE_API_KEY,
+    },
+    redirect: "follow",
+  };
+  let resp_arr = []
+  array.forEach(async (el)=>{
+    let resp = await fetch(
+      `${config.API_URL}/users/by-uuid/${el}`,
+      requestOptions
+
+    );
+    resp_arr.push(resp.name)
+
+  })
+  console.log(resp_arr)
+  return resp_arr;
+
+}

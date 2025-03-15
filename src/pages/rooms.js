@@ -2,11 +2,15 @@ import { useState, useEffect } from "react";
 import * as config from "../config";
 import * as RoomService from "./services/room";
 import { toast } from "react-toastify";
+import GroupCalendar from './services/timetable'
 
 export default function RoomsPage() {
   const [roomCode, setRoomCode] = useState("");
   const [roomName, setRoomName] = useState("");
   const [rooms, setRooms] = useState([]);
+  
+  const [tableRoom, setGroupTable] = useState({})
+  const [displayGroupRoom, setGroupRoom] = useState(false)
 
   async function fetchRooms() {
     try {
@@ -69,6 +73,12 @@ export default function RoomsPage() {
       error: 'Failed to create the room. Please try again. ❌',
     });
   };
+  var visitRoom = async (e) => {
+    let response = await RoomService.displayRoom(e, localStorage.getItem("JWT_TOKEN"))
+    setGroupTable(response)
+    setGroupRoom(true)
+    console.log('response, ',response)
+  };
 
   const leaveRoom = async (roomId) => {
     const leaveRoomPromise = RoomService.leaveRoom(roomId, localStorage.getItem("JWT_TOKEN"))
@@ -77,6 +87,8 @@ export default function RoomsPage() {
         return roomData;
       }
     );
+
+    
 
     toast.promise(leaveRoomPromise,
       {
@@ -88,7 +100,9 @@ export default function RoomsPage() {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen dots-background">
+    <div className="bg-gradient-to-r from-blue-200 to-cyan-200">
+    <div className="flex justify-center items-center min-h-screen ">
+      {!displayGroupRoom &&
       <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
         <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-80">
           <input
@@ -99,14 +113,14 @@ export default function RoomsPage() {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+            className="bg-gray-800 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
             onClick={handleJoin}
           >
             Join
           </button>
         </div>
-        <span className="w-full flex justify-center items-center">OR</span>
-        <hr />
+        <span className="w-full flex justify-center items-center opacity-70">OR</span>
+        <hr  />
         <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-80">
           <input
             type="text"
@@ -116,7 +130,7 @@ export default function RoomsPage() {
           />
           <button
             type="submit"
-            className="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+            className="bg-gray-800 text-white  px-4 py-2 hover:bg-blue-600 transition-colors"
             onClick={handleCreate}
           >
             Create a room
@@ -138,14 +152,16 @@ export default function RoomsPage() {
                 </span>
                 <div className="flex gap-2">
                   <a
-                    className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors"
-                    href={`/room?id=${room._id}`}
+                    onClick={() => visitRoom(room._id)} 
+                    
+                    className="focus:outline-none text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800"
+                    // href={/room?id=${room._id}}
                   >
-                    View
+                    Visit
                   </a>
                   <button
                     type="submit"
-                    className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition-colors"
+                    className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900"
                     onClick={() => leaveRoom(room._id)}
                   >
                     Leave
@@ -157,7 +173,9 @@ export default function RoomsPage() {
             <li>No rooms available</li>
           )}
         </ul>
-      </div>
+      </div>}
+      {displayGroupRoom && <GroupCalendar free_times={tableRoom.free_times}></GroupCalendar>}
+    </div>
     </div>
   );
 }
