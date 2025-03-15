@@ -1,8 +1,6 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 
-import * as UserService from "./services/user";
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -19,7 +17,6 @@ export default function Home() {
     if (value == null) {
       alert("You are not logged in, please log in");
       window.location.href = "/login";
-    } else {
     }
   }
 

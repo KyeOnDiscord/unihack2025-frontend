@@ -23,11 +23,7 @@ export default function SignUpForm() {
     // Handle form submission (e.g., send data to API)
     // console.log(formData);
     // console.log(config.API_URL);
-    await UserService.RegisterUser(
-      formData.displayName,
-      formData.email,
-      formData.password
-    );
+    await UserService.RegisterUser(formData.displayName, formData.email);
   };
 
   return (
@@ -75,7 +71,7 @@ export default function SignUpForm() {
             />
           </div>
 
-          <div>
+          {/* <div>
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
@@ -91,7 +87,7 @@ export default function SignUpForm() {
               required
               className="mt-2 w-full p-3 border border-gray-300 rounded-lg shadow-sm focus:ring-blue-500 focus:border-blue-500"
             />
-          </div>
+          </div> */}
 
           <div>
             <button
