@@ -38,6 +38,7 @@ export default function Home() {
   const handleCalLink = async (e) => {
     e.preventDefault();
     await UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN"));
+    alert("You have saved your calendar link");
   };
 
   const handleCalLinkChange = (e) => {
@@ -47,6 +48,7 @@ export default function Home() {
   const handlePrefText = async (e) => {
     e.preventDefault();
     await UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN"));
+    alert("You have saved your preferences");
   };
 
   const handlePrefTextChange = (e) => {
