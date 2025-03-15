@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as config from "../config";
 import * as RoomService from "./services/room";
+import { toast } from "react-toastify";
 
 export default function RoomsPage() {
   const [roomCode, setRoomCode] = useState("");
@@ -22,7 +23,13 @@ export default function RoomsPage() {
     }
   }
   useEffect(() => {
-    fetchRooms();
+    toast.promise(fetchRooms(),
+      { 
+        pending: 'Fetching rooms...',
+        success: { render: 'Rooms fetched!', delay: 100 },
+        error: { render: 'There was an error fetching your rooms!', delay: 100 },
+      }
+    );
   }, []);
 
   const handleCodeChange = (e) => {
@@ -35,14 +42,32 @@ export default function RoomsPage() {
 
   const handleJoin = async (e) => {
     e.preventDefault();
-    await RoomService.joinRoom(roomCode, localStorage.getItem("JWT_TOKEN"))
+    const joinRoomPromise = RoomService.joinRoom(roomCode, localStorage.getItem("JWT_TOKEN"))
       .then(() => fetchRooms());
+    
+    toast.promise(joinRoomPromise,
+      {
+      pending: 'Joining room...',
+      success: 'Successfully joined the room! 🎉',
+      error: 'Failed to join the room. Please try again. ❌',
+    });
   };
 
   const handleCreate = async (e) => {
     e.preventDefault();
-    await RoomService.createRoom(roomName, localStorage.getItem("JWT_TOKEN"))
-      .then(() => fetchRooms());
+    const createRoomPromise = RoomService.createRoom(roomName, localStorage.getItem("JWT_TOKEN"))
+      .then((roomData) => {
+          fetchRooms();
+          return roomData;
+        }
+      );
+
+    toast.promise(createRoomPromise,
+      {
+      pending: 'Creating room...',
+      success: 'Successfully created the room! 🎉\nFind your room code in the list of rooms below.',
+      error: 'Failed to create the room. Please try again. ❌',
+    });
   };
 
   const visitRoom = (roomId) => {
@@ -50,8 +75,20 @@ export default function RoomsPage() {
   };
 
   const leaveRoom = async (roomId) => {
-    await RoomService.leaveRoom(roomId, localStorage.getItem("JWT_TOKEN"))
-      .then(() => fetchRooms());
+    const leaveRoomPromise = RoomService.leaveRoom(roomId, localStorage.getItem("JWT_TOKEN"))
+    .then((roomData) => {
+        fetchRooms();
+        return roomData;
+      }
+    );
+
+    toast.promise(leaveRoomPromise,
+      {
+        pending: 'Leaving room...',
+        success: 'Successfully left the room ☹️.',
+        error: 'Failed to ;eave the room. You are stuck here forever! 😈',
+      }
+    );
   };
 
   return (
