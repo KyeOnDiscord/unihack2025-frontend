@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -12,16 +13,23 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
+let displayName = "";
+let email = "";
 
 export default function Home() {
-  if (typeof window !== "undefined") {
-    const value = localStorage.getItem("JWT_TOKEN");
-    if (value == null) {
+  const [displayName, setdisplayName] = useState("...");
+
+  useEffect(() => {
+    const token = localStorage.getItem("JWT_TOKEN");
+    if (token == null) {
       alert("You are not logged in, please log in");
       window.location.href = "/login";
     } else {
+      UserService.me(token).then((x) => {
+        setdisplayName(x.name);
+      });
     }
-  }
+  }, []);
 
   const style = { backgroundColor: "#004185" };
 
@@ -45,7 +53,7 @@ export default function Home() {
 
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-semibold mb-6">Welcome</h2>
+          <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
           <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
             People create their own profile and upload their calendar (.ics)
             from Allocate+. Users can join or create a group. Up to 10 people
