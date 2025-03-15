@@ -27,7 +27,7 @@ export default function SignUpForm() {
     toast.promise(UserService.RegisterUser(formData.displayName, formData.email),
       { 
         pending: 'Registering...',
-        success: { render: 'A verification email was sent to your inbox, please click it!', delay: 99999 },
+        success: { render: 'A verification email was sent to your inbox, please click it!', delay: 100 },
         error: { render: 'There was an issue while registering.', delay: 100 },
       }
     );
