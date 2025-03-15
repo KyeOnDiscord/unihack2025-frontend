@@ -13,6 +13,7 @@ export default function Home() {
   const [displayName, setdisplayName] = useState("...");
   const [calLink, setCalLink] = useState("");
   const [prefText, setPrefText] = useState("");
+  const [instructIsVisible, setInstructIsVisible] = useState(false);
 
   useEffect(() => {
     const token = localStorage.getItem("JWT_TOKEN");
@@ -105,21 +106,72 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-6 space-y-5 text-center">
           <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
 
-          <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-20">
-            <input
-              type="url"
-              placeholder="https://my-timetable.monash.edu/..."
-              class="flex-1 px-4 py-2 outline-none "
-              onChange={handleCalLinkChange}
-            />
+          <div class="w-full flex flex-col items-start p-2">
+            <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden">
+              <input
+                type="url"
+                placeholder="https://my-timetable.monash.edu/..."
+                class="flex-1 px-4 py-2 outline-none"
+                onChange={handleCalLinkChange}
+              />
+              <button
+                type="submit"
+                class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+                onClick={handleCalLink}
+              >
+                Set Calendar Link
+              </button>
+            </div>
             <button
               type="submit"
-              class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
-              onClick={handleCalLink}
+              className="text-xs text-gray-500 mt-1 underline cursor-pointer"
+              onClick={() => setInstructIsVisible(true)}
             >
-              Set Calendar Link
+              Where do I get this link?
             </button>
           </div>
+
+          {instructIsVisible && (
+            <div
+            className="fixed inset-0 flex items-center justify-center z-50"
+          >
+            <div className="bg-white p-6 rounded-lg shadow-lg w-200 text-center relative">
+              <h3 className="text-lg font-semibold mb-2">Where to get the ICS URL</h3>
+              <p className="text-sm text-gray-600 mb-2">
+                Go to Allocate+{" "}
+                <a
+                  href="https://my-timetable.monash.edu/odd/student"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-500 underline"
+                >
+                  https://my-timetable.monash.edu/odd/student
+                </a>
+              </p>
+          
+              {/* Fixed Image Source - Ensure it's inside the 'public' folder */}
+              <img
+                src="/where-to-get-ics.png"
+                alt="Allocate+ page"
+                className="w-full h-auto rounded-md mb-3 border border-gray-300"
+              />
+          
+              <p className="text-sm text-gray-600">
+                Then click copy to copy the link to your timetable.
+              </p>
+              <p className="text-sm text-gray-600 mb-4">
+                Finally, set it as the calendar link on this homepage.
+              </p>
+          
+              <button
+                onClick={() => setInstructIsVisible(false)}
+                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+              >
+                Close
+              </button>
+            </div>
+            </div>
+          )}
 
           <div className="w-full flex flex-col items-center border border-gray-300 rounded-md overflow-hidden">
             <textarea
