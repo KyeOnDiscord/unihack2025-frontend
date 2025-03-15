@@ -150,22 +150,6 @@ export default function Home() {
     };
   };
 
-  // events = [
-  //   {
-  //     id: 1,
-  //     title: "event 1",
-  //     start: new Date(2025, 3, 1, 0, 0, 0),
-  //     end: new Date(2025, 3, 2, 0, 0, 0),
-  //     description: "Discuss project updates",
-  //   },
-
-  //   {
-  //     id: 2,
-  //     title: "DTS STARTS",
-  //     start: new Date(2025, 4, 1, 0, 0, 0),
-  //     end: new Date(2025, 4, 10, 0, 0, 0),
-  //   },
-  // ];
   const [selectedEvent, setSelectedEvent] = useState(null);
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen">
