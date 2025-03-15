@@ -33,7 +33,8 @@ async function getEvents() {
 }
 
 export default function Home() {
-  const [displayName, setdisplayName] = useState("...");
+  const [loadedUserdata, setloadedUserdata] = useState(false);
+  const [displayName, setdisplayName] = useState(null);
   const [events, setEvents] = useState([]);
   const [calLink, setCalLink] = useState("");
   const [prefText, setPrefText] = useState("");
@@ -64,11 +65,15 @@ export default function Home() {
           window.location.href = "/login";
         });
 
-      toast.promise(userPromise, {
-        pending: "Loading user data...",
-        success: { render: "User data loaded. ✅", delay: 100 },
-        error: { render: "User data loading error. ❌", delay: 100 },
-      });
+      toast
+        .promise(userPromise, {
+          pending: "Loading user data...",
+          success: { render: "User data loaded. ✅", delay: 100 },
+          error: { render: "User data loading error. ❌", delay: 100 },
+        })
+        .then((x) => {
+          setloadedUserdata(true);
+        });
     }
   }, []);
 
@@ -178,20 +183,23 @@ export default function Home() {
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 space-y-5 text-center">
           <h2 className="text-3xl font-semibold mb-6">
-            Welcome {displayName}
-            <a
-              href="/rooms"
-              className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
-            >
-              See Rooms
-            </a>
-            <button
-              type="submit"
-              onClick={handleSignOut}
-              className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
-            >
-              Sign Out
-            </button>
+            {loadedUserdata == true && (
+              <>
+                Welcome {displayName}
+                <a href={"/rooms"}>
+                  <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                    See Rooms
+                  </button>
+                </a>
+                <button
+                  type="submit"
+                  onClick={handleSignOut}
+                  className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+                >
+                  Sign Out
+                </button>
+              </>
+            )}
           </h2>
 
           <div className="flex justify-center mt-12">
