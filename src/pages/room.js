@@ -1,18 +1,18 @@
 import { useState } from "react";
 import * as config from "../config";
-import * as UserService from "./services/user";
+import * as RoomService from "./services/room";
 
 export default function LoginForm() {
-  const [roomId, setRoomId] = useState("");
+  const [roomCode, setRoomCode] = useState("");
 
   const handleChange = (e) => {
-    setRoomId(e.target.value);
+    setRoomCode(e.target.value);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(roomId);
-    await UserService.FindRoom(roomId);
+    console.log(roomCode);
+    await RoomService.JoinRoom(roomCode, localStorage.getItem("JWT_TOKEN"));
   };
 
   return (
@@ -23,10 +23,12 @@ export default function LoginForm() {
             type="text"
             placeholder="Search..."
             class="flex-1 px-4 py-2 outline-none "
+            onChange={handleChange}
           />
           <button
             type="submit"
             class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+            onClick={handleSubmit}
           >
             Search
           </button>
