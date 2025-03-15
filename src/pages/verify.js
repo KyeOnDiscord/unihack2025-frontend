@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useState, useEffect } from "react";
 import * as UserService from "./services/user";
+import { toast } from "react-toastify";
 
 function getEmailFromJWT(token) {
   try {
@@ -41,15 +42,34 @@ export default function Verify() {
     // Handle form submission (e.g., send data to API)
     // console.log(formData);
     // console.log(config.API_URL);
+    let statusCode = await toast.promise(
+      UserService.ResetPassword(email, formData.password),
+      {
+        pending: "Setting Password...",
+        success: {
+          render:
+            "Your password has been successfully set! Redirecting you to login...",
+          delay: 100,
+        },
+        error: {
+          render: "There was an issue while setting your password. 😭",
+          delay: 100,
+        },
+      }
+    );
 
-    await UserService.ResetPassword(email, formData.password);
+    await new Promise((r) => setTimeout(r, 2000));
+
+    if (statusCode == 200) {
+      location.href = "/login";
+    }
   };
 
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const jwt_token = urlParams.get("token");
 
-    console.log(jwt_token);
+    //console.log(jwt_token);
     let email = getEmailFromJWT(jwt_token);
     if (email != null) {
       setemail(email);

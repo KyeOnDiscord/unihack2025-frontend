@@ -38,9 +38,7 @@ export async function ResetPassword(email, password) {
     `${config.API_URL}/users/account/reset-password`,
     requestOptions
   );
-  console.log("abc");
-  console.log(passwordResetResp);
-  return passwordResetResp.ok;
+  return passwordResetResp.status;
 }
 export async function LoginUser(email, password) {
   console.log("Logging in the user...");
