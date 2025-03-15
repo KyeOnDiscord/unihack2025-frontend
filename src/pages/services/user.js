@@ -1,3 +1,4 @@
+import Link from "next/link";
 import * as config from "../../config";
 
 export async function RegisterUser(name, email, password) {
@@ -55,8 +56,8 @@ export async function LoginUser(email, password) {
   let resp = await fetch(`${config.API_URL}/token`, loginReq);
   if (resp.ok) {
     let data = await resp.json();
-    config.JWT_TOKEN = data.access_token;
-    return true;
+    localStorage.setItem("token", data.access_token);
+    window.location.href = "/home";
   } else {
     alert("Login credentials incorrect");
     return false;
