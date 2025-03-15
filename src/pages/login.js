@@ -1,6 +1,7 @@
 import { useState } from "react";
 import * as config from "../config";
 import * as UserService from "./services/user";
+import { toast } from 'react-toastify';
 
 console.log(UserService);
 export default function LoginForm() {
@@ -23,7 +24,13 @@ export default function LoginForm() {
     // Handle form submission (e.g., send data to API)
     // console.log(formData);
     // console.log(config.API_URL);
-    await UserService.LoginUser(formData.email, formData.password);
+    toast.promise(UserService.LoginUser(formData.email, formData.password),
+      { 
+        pending: 'Logging in...',
+        success: { render: 'Logged in! ✅', delay: 100 },
+        error: { render: 'There was a problem while logging in. 😭', delay: 100 },
+      }
+    );
   };
 
   return (
