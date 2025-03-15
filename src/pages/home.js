@@ -64,6 +64,21 @@ export default function Home() {
     setPrefText(e.target.value);
   };
 
+  const handleSignOut = () => {
+    // Clear cookies by setting them to expire
+    document.cookie.split(";").forEach((cookie) => {
+      document.cookie = cookie
+        .replace(/^ +/, "")
+        .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
+    });
+  
+    // Clear Local Storage
+    localStorage.removeItem("JWT_TOKEN");
+  
+    // Redirect to login page
+    window.location.href = "/login";
+  };
+
   const style = { backgroundColor: "#004185" };
 
   let events = [
@@ -97,7 +112,7 @@ export default function Home() {
           <h1 className="text-4xl sm:text-6xl font-bold mb-4">AllocateUs</h1>
 
           <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            A calendar to make groups to sync schedules with uni friends
+            📆 Make calendars with your uni friend groups and sync schedules together!
           </p>
         </div>
       </header>
@@ -112,6 +127,14 @@ export default function Home() {
             >
               See Rooms
             </a>
+
+            <button
+              type="submit"
+              onClick={handleSignOut}
+              className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+            >
+              Sign Out
+            </button>
           </h2>
           
 
