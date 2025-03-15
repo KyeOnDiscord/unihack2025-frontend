@@ -9,8 +9,36 @@ import moment from "moment";
 
 const localizer = momentLocalizer(moment);
 
+async function getEvents() {
+  let calender_data = await UserService.GetCalendar(
+    localStorage.getItem("JWT_TOKEN")
+  );
+  //console.log(calender_data.events);
+  //setcalData(calender_d.events);
+
+  let events = [];
+  let i = 0;
+
+  calender_data.events.forEach((x) => {
+    if (i < 10) {
+      i++;
+      events.push({
+        id: i,
+        title: x.summary,
+        start: new Date(x.start_time_iso),
+        end: new Date(x.end_time_iso),
+        // description: "Discuss project updates",
+      });
+    }
+  });
+  console.log("events array:");
+  console.log(events);
+  return events;
+}
+
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
+  const [yayevents, setevents] = useState([]);
   const [calLink, setCalLink] = useState("");
   const [prefText, setPrefText] = useState("");
   const [instructIsVisible, setInstructIsVisible] = useState(false);
@@ -22,26 +50,35 @@ export default function Home() {
       window.location.href = "/login";
     } else {
       UserService.me(token)
-        .then((x) => {
+        .then(async (x) => {
+          console.log(x);
           setdisplayName(x.name);
+          setevents(await getEvents());
+          console.log("stringgg");
+          console.log(JSON.stringify(yayevents));
         })
         .catch((x) => {
-          alert("You are not logged in, please log in");
-          window.location.href = "/login";
+          alert(x);
+          // alert("You are not logged in, please log in");
+          // window.location.href = "/login";
         });
     }
   }, []);
 
   const handleCalLink = async (e) => {
     e.preventDefault();
-    toast.promise(
-      UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
-      {
-        pending: "Saving calender...",
-        success: { render: "Calender saved. ✅", delay: 100 },
-        error: { render: "Calender saving error. ❌", delay: 100 },
-      }
-    );
+    if (!calLink.startsWith("https://")) {
+      toast("That's not a valid calendar url!");
+    } else {
+      toast.promise(
+        UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
+        {
+          pending: "Saving calender...",
+          success: { render: "Calender saved. ✅", delay: 100 },
+          error: { render: "Calender saving error. ❌", delay: 100 },
+        }
+      );
+    }
   };
 
   const handleCalLinkChange = (e) => {
@@ -71,32 +108,32 @@ export default function Home() {
         .replace(/^ +/, "")
         .replace(/=.*/, `=;expires=${new Date(0).toUTCString()};path=/`);
     });
-  
+
     // Clear Local Storage
     localStorage.removeItem("JWT_TOKEN");
-  
+
     // Redirect to login page
     window.location.href = "/login";
   };
 
   const style = { backgroundColor: "#004185" };
 
-  let events = [
-    {
-      id: 1,
-      title: "event 1",
-      start: new Date(2025, 3, 1, 0, 0, 0),
-      end: new Date(2025, 3, 2, 0, 0, 0),
-      description: "Discuss project updates",
-    },
+  // events = [
+  //   {
+  //     id: 1,
+  //     title: "event 1",
+  //     start: new Date(2025, 3, 1, 0, 0, 0),
+  //     end: new Date(2025, 3, 2, 0, 0, 0),
+  //     description: "Discuss project updates",
+  //   },
 
-    {
-      id: 2,
-      title: "DTS STARTS",
-      start: new Date(2025, 4, 1, 0, 0, 0),
-      end: new Date(2025, 4, 10, 0, 0, 0),
-    },
-  ];
+  //   {
+  //     id: 2,
+  //     title: "DTS STARTS",
+  //     start: new Date(2025, 4, 1, 0, 0, 0),
+  //     end: new Date(2025, 4, 10, 0, 0, 0),
+  //   },
+  // ];
   const [selectedEvent, setSelectedEvent] = useState(null);
   return (
     <div className="bg-gray-50 text-gray-900 min-h-screen">
@@ -112,7 +149,8 @@ export default function Home() {
           <h1 className="text-4xl sm:text-6xl font-bold mb-4">AllocateUs</h1>
 
           <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            📆 Make calendars with your uni friend groups and sync schedules together!
+            📆 Make calendars with your uni friend groups and sync schedules
+            together!
           </p>
         </div>
       </header>
@@ -127,7 +165,6 @@ export default function Home() {
             >
               See Rooms
             </a>
-
             <button
               type="submit"
               onClick={handleSignOut}
@@ -136,7 +173,6 @@ export default function Home() {
               Sign Out
             </button>
           </h2>
-          
 
           <div className="flex justify-center mt-12">
             <Calendar
@@ -168,7 +204,9 @@ export default function Home() {
                   {moment(selectedEvent.start).format("LLL")} -{" "}
                   {moment(selectedEvent.end).format("LLL")}
                 </p>
-                <button type="submit" onClick={() => setSelectedEvent(null)}>Close</button>
+                <button type="submit" onClick={() => setSelectedEvent(null)}>
+                  Close
+                </button>
               </div>
             )}
 
@@ -215,44 +253,44 @@ export default function Home() {
           </div>
 
           {instructIsVisible && (
-            <div
-            className="fixed inset-0 flex items-center justify-center z-50"
-          >
-            <div className="bg-white p-6 rounded-lg shadow-lg w-200 text-center relative">
-              <h3 className="text-lg font-semibold mb-2">Where to get the ICS URL</h3>
-              <p className="text-sm text-gray-600 mb-2">
-                Go to Allocate+{" "}
-                <a
-                  href="https://my-timetable.monash.edu/odd/student"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-500 underline"
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div className="bg-white p-6 rounded-lg shadow-lg w-200 text-center relative">
+                <h3 className="text-lg font-semibold mb-2">
+                  Where to get the ICS URL
+                </h3>
+                <p className="text-sm text-gray-600 mb-2">
+                  Go to Allocate+{" "}
+                  <a
+                    href="https://my-timetable.monash.edu/odd/student"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-500 underline"
+                  >
+                    https://my-timetable.monash.edu/odd/student
+                  </a>
+                </p>
+
+                {/* Fixed Image Source - Ensure it's inside the 'public' folder */}
+                <img
+                  src="/where-to-get-ics.png"
+                  alt="Allocate+ page"
+                  className="w-full h-auto rounded-md mb-3 border border-gray-300"
+                />
+
+                <p className="text-sm text-gray-600">
+                  Then click copy to copy the link to your timetable.
+                </p>
+                <p className="text-sm text-gray-600 mb-4">
+                  Finally, set it as the calendar link on this homepage.
+                </p>
+
+                <button
+                  onClick={() => setInstructIsVisible(false)}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
                 >
-                  https://my-timetable.monash.edu/odd/student
-                </a>
-              </p>
-          
-              {/* Fixed Image Source - Ensure it's inside the 'public' folder */}
-              <img
-                src="/where-to-get-ics.png"
-                alt="Allocate+ page"
-                className="w-full h-auto rounded-md mb-3 border border-gray-300"
-              />
-          
-              <p className="text-sm text-gray-600">
-                Then click copy to copy the link to your timetable.
-              </p>
-              <p className="text-sm text-gray-600 mb-4">
-                Finally, set it as the calendar link on this homepage.
-              </p>
-          
-              <button
-                onClick={() => setInstructIsVisible(false)}
-                className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
-              >
-                Close
-              </button>
-            </div>
+                  Close
+                </button>
+              </div>
             </div>
           )}
 
@@ -271,7 +309,6 @@ export default function Home() {
               Set Preferences
             </button>
           </div>
-
         </div>
         <br />
       </section>
