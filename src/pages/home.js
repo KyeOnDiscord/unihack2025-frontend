@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
-import Navbar from "../components/navbar";
 import * as UserService from "./services/user";
 
 const geistSans = Geist({
