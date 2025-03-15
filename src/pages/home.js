@@ -49,7 +49,12 @@ export default function Home() {
         .then(async (x) => {
           console.log(x);
           setdisplayName(x.name);
-          setCalLink(x.calender_ics_link);
+          if (x.calender_ics_link == null) {
+            toast.warn("Please set your Allocate+ calendar link");
+          } else {
+            setCalLink(x.calender_ics_link);
+          }
+
           setPrefText(x.preferences);
           setEvents(await getEvents());
         })
