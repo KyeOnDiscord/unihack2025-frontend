@@ -12,6 +12,10 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
+  //   if (localStorage.getItem("JWT_TOKEN") == null) {
+  //     alert("You are not logged in, please log in");
+  //     window.location.href = "/login";
+  //   }
   const style = { backgroundColor: "#004185" };
 
   return (
@@ -34,29 +38,19 @@ export default function Home() {
 
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 text-center">
-          <h2 className="text-3xl font-semibold mb-6">How It Works</h2>
-          < className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            People create th className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
+          <h2 className="text-3xl font-semibold mb-6">Welcome</h2>
+          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
+            People create their own profile and upload their calendar (.ics)
+            from Allocate+. Users can join or create a group. Up to 10 people
+            can join a group, and their schedules can be synced. Within the
+            rooms, users can view other people&apos;s calendars.
+          </p>
+          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
             People can put their hobbies and interests on their profile, and AI
             can suggest activities for groups of people depending on their
             interests.
           </p>
         </div>
-      </section>
-      <section className="text-center">
-        <a href={`/login`}>
-          <button
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 m-5"
-            href="/login"
-          >
-            Login
-          </button>
-        </a>
-        <a href={`/registe`}>
-          <button className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">
-            Register
-          </button>
-        </a>
       </section>
     </div>
   );

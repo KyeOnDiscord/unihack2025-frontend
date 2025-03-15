@@ -43,6 +43,7 @@ export async function RegisterUser(name, email, password) {
 }
 
 export async function LoginUser(email, password) {
+  console.log("Logging in the user...");
   let loginReq = {
     method: "POST",
     headers: {
@@ -56,7 +57,7 @@ export async function LoginUser(email, password) {
   let resp = await fetch(`${config.API_URL}/token`, loginReq);
   if (resp.ok) {
     let data = await resp.json();
-    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("JWT_TOKEN", data.access_token);
     window.location.href = "/home";
   } else {
     alert("Login credentials incorrect");
