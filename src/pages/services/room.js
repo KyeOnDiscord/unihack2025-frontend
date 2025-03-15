@@ -8,7 +8,7 @@ export async function joinRoom(roomCode, bearer) {
     "Content-Type": "application/x-www-form-urlencoded",
   };
 
-  fetch(url, {
+  await fetch(url, {
     method: "POST",
     headers: headers,
   })
@@ -32,7 +32,7 @@ export async function createRoom(roomName, bearer) {
     name: roomName,
   });
 
-  fetch(url, {
+  await fetch(url, {
     method: "POST",
     headers: headers,
     body: raw,
@@ -44,4 +44,38 @@ export async function createRoom(roomName, bearer) {
     .catch((error) => {
       console.error("Error:", error);
     });
+}
+
+export async function getRooms(bearer) {
+  const url = `${config.API_URL}/rooms/my-rooms`;
+  const headers = {
+    Accept: "application/json",
+    Authorization: "Bearer " + bearer,
+  };
+
+  const resp = await fetch(url, {
+    method: "GET",
+    headers: headers,
+  });
+  
+  if (resp.ok) {
+    return await resp.json();
+  }
+}
+
+export async function leaveRoom(roomId, bearer) {
+  const url = `${config.API_URL}/rooms/${roomId}/leave`;
+  const headers = {
+    Accept: "application/json",
+    Authorization: "Bearer " + bearer,
+  };
+
+  const resp = await fetch(url, {
+    method: "POST",
+    headers: headers,
+  });
+  
+  if (resp.ok) {
+    return await resp.json();
+  }
 }
