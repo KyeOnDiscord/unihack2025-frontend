@@ -97,6 +97,19 @@ export async function SetCalendar(calendar_url, bearer) {
   return resp.ok;
 }
 
+export async function GetCalendar(bearer) {
+  const requestOptions = {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${bearer}`,
+    },
+    redirect: "follow",
+  };
+
+  let resp = await fetch(`${config.API_URL}/users/calender/`, requestOptions);
+  return resp.json();
+}
+
 export async function SetPreferences(preferences, bearer) {
   const requestOptions = {
     method: "POST",
