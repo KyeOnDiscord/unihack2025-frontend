@@ -37,8 +37,8 @@ export default function Home() {
       UserService.SetCalendar(calLink, localStorage.getItem("JWT_TOKEN")),
       {
         pending: "Saving calender...",
-        success: { render: "Calender saved", delay: 100 },
-        error: { render: "Calender saving error.", delay: 100 },
+        success: { render: "Calender saved. ✅", delay: 100 },
+        error: { render: "Calender saving error. ❌", delay: 100 },
       }
     );
   };
@@ -53,8 +53,8 @@ export default function Home() {
       UserService.SetPreferences(prefText, localStorage.getItem("JWT_TOKEN")),
       {
         pending: "Saving preferences...",
-        success: { render: "Preferences saved", delay: 100 },
-        error: { render: "Preferences saving error.", delay: 100 },
+        success: { render: "Preferences saved. ✅", delay: 100 },
+        error: { render: "Preferences saving error. ❌", delay: 100 },
       }
     );
   };
