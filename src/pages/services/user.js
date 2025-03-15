@@ -40,6 +40,25 @@ export async function ResetPassword(email, password) {
   );
   return passwordResetResp.status;
 }
+
+export async function VerifyUser(token) {
+  // reset password
+  let requestOptions = {
+    method: "POST",
+    headers: {
+      Authorization: config.INTERFACE_API_KEY,
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    redirect: "follow",
+  };
+  console.log(requestOptions);
+  let passwordResetResp = await fetch(
+    `${config.API_URL}/users/verify/${token}`,
+    requestOptions
+  );
+  return passwordResetResp.status;
+}
+
 export async function LoginUser(email, password) {
   console.log("Logging in the user...");
   let loginReq = {

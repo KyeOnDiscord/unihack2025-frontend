@@ -42,7 +42,7 @@ export default function Verify() {
     // Handle form submission (e.g., send data to API)
     // console.log(formData);
     // console.log(config.API_URL);
-    let statusCode = await toast.promise(
+    let resetPwdPromise = toast.promise(
       UserService.ResetPassword(email, formData.password),
       {
         pending: "Setting Password...",
@@ -57,6 +57,13 @@ export default function Verify() {
         },
       }
     );
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const jwt_token = urlParams.get("token");
+
+    let VerifyUser = await UserService.VerifyUser(jwt_token);
+
+    let statusCode = await resetPwdPromise;
 
     await new Promise((r) => setTimeout(r, 2000));
 
