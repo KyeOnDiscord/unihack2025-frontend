@@ -4,15 +4,25 @@ import * as RoomService from "./services/room";
 
 export default function LoginForm() {
   const [roomCode, setRoomCode] = useState("");
+  const [roomName, setRoomName] = useState("");
 
-  const handleChange = (e) => {
+  const handleCodeChange = (e) => {
     setRoomCode(e.target.value);
   };
 
-  const handleSubmit = async (e) => {
+  const handleNameChange = (e) => {
+    setRoomName(e.target.value);
+  };
+
+  const handleJoin = async (e) => {
     e.preventDefault();
     console.log(roomCode);
-    await RoomService.JoinRoom(roomCode, localStorage.getItem("JWT_TOKEN"));
+    await RoomService.joinRoom(roomCode, localStorage.getItem("JWT_TOKEN"));
+  };
+
+  const handleCreate = async (e) => {
+    e.preventDefault();
+    await RoomService.createRoom(roomName, localStorage.getItem("JWT_TOKEN"));
   };
 
   return (
@@ -21,23 +31,35 @@ export default function LoginForm() {
         <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-80">
           <input
             type="text"
-            placeholder="Search..."
+            placeholder="Room Code"
             class="flex-1 px-4 py-2 outline-none "
-            onChange={handleChange}
+            onChange={handleCodeChange}
           />
           <button
             type="submit"
             class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
-            onClick={handleSubmit}
+            onClick={handleJoin}
           >
-            Search
+            Join
           </button>
         </div>
         <span className="w-full flex justify-center items-center">OR</span>
         <hr />
-        <button className="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-          Create a room
-        </button>
+        <div class="w-full flex items-center border border-gray-300 rounded-md overflow-hidden w-80">
+          <input
+            type="text"
+            placeholder="Room Name"
+            class="flex-1 px-4 py-2 outline-none "
+            onChange={handleNameChange}
+          />
+          <button
+            type="submit"
+            class="bg-blue-500 text-white px-4 py-2 hover:bg-blue-600 transition-colors"
+            onClick={handleCreate}
+          >
+            Create a room
+          </button>
+        </div>
         <br />
         <br />
         <p>The list of your rooms</p>

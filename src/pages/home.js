@@ -57,6 +57,7 @@ export default function Home() {
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
+          <a href={"/rooms"}>See rooms</a>
         </div>
       </section>
     </div>
