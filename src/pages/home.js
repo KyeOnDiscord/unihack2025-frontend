@@ -13,8 +13,6 @@ const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
 });
-let displayName = "";
-let email = "";
 
 export default function Home() {
   const [displayName, setdisplayName] = useState("...");
@@ -54,17 +52,6 @@ export default function Home() {
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 text-center">
           <h2 className="text-3xl font-semibold mb-6">Welcome {displayName}</h2>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            People create their own profile and upload their calendar (.ics)
-            from Allocate+. Users can join or create a group. Up to 10 people
-            can join a group, and their schedules can be synced. Within the
-            rooms, users can view other people&apos;s calendars.
-          </p>
-          <p className="text-lg sm:text-xl max-w-3xl mx-auto mb-8">
-            People can put their hobbies and interests on their profile, and AI
-            can suggest activities for groups of people depending on their
-            interests.
-          </p>
         </div>
       </section>
     </div>
