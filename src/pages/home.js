@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import * as UserService from "../services/user";
 import { toast } from "react-toastify";
+import Image from "next/image";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
@@ -301,7 +302,7 @@ export default function Home() {
                 </p>
 
                 {/* Fixed Image Source - Ensure it's inside the 'public' folder */}
-                <img
+                <Image
                   src="/where-to-get-ics.png"
                   alt="Allocate+ page"
                   className="w-full h-auto rounded-md mb-3 border border-gray-300"
