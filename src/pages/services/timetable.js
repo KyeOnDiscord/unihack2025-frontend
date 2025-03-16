@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { getSuggestion } from "./room";
+import { toast } from "react-toastify";
 
 const localizer = momentLocalizer(moment);
 
@@ -80,9 +82,10 @@ export const CustomToolbar = (toolbar) => {
 function GroupCalendar({ free_times }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [suggested, setSuggested] = useState(null);
   const [view, setView] = useState("week");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const formattedEvents = free_times.map((event, index) => {
       let arr = Object.keys(event.free_users);
       let description_add = "";
@@ -108,8 +111,23 @@ function GroupCalendar({ free_times }) {
     setEvents(formattedEvents);
   }, [free_times]);
 
+  useEffect(() => {
+    if (selectedEvent && selectedEvent.suggestion == null) {
+      toast.promise(
+        getSuggestion(selectedEvent.users, selectedEvent.start)
+          .then((data) => setSuggested(data.suggested_location)),
+        {
+          pending: "Asking AI for suggestions...",
+          success: "AI suggestions fetched!",
+          error: "Failed to fetch AI suggested events.",
+        }
+      );
+    } else {
+      setSuggested(null);
+    }
+  }, [selectedEvent]);
+
   const eventStyleGetter = (event) => {
-    console.log("event", event);
     const duration = moment(event.end).diff(moment(event.start), "minutes");
     const backgroundColor = duration > 120 ? "#22aa84ab" : "#3b82f633";
     const textColor = duration > 120 ? "#fff" : "#3b82f6";
@@ -181,6 +199,7 @@ function GroupCalendar({ free_times }) {
             {moment(selectedEvent.start).format("LLL")} -{" "}
             {moment(selectedEvent.end).format("LLL")}
           </p>
+          <p className="text-sm text-gray-600">{suggested}</p>
           <button
             type="submit"
             onClick={() => setSelectedEvent(null)}
