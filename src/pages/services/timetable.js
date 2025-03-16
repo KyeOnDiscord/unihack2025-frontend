@@ -8,7 +8,7 @@ const localizer = momentLocalizer(moment);
 function GroupCalendar({ free_times }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
-  const [view, setView] = useState("month");
+  const [view, setView] = useState("week");
 
   React.useEffect(() => {
     const formattedEvents = free_times.map((event, index) => {
@@ -137,7 +137,6 @@ function GroupCalendar({ free_times }) {
           events={events}
           view={view}
           onView={setView}
-          views={["month", "week", "day", "agenda"]}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={(event) => setSelectedEvent(event)}
@@ -145,7 +144,11 @@ function GroupCalendar({ free_times }) {
           components={{
             toolbar: CustomToolbar,
           }}
-          style={{ height: 650, width: "75vw" }}
+          style={{ height: 650}}
+          className="w-full"
+          defaultView="week"
+          min={new Date(2025, 2, 16, 8, 0)}
+          max={new Date(2025, 2, 16, 20, 0)}
         />
       </div>
       {/* Event Details Modal */}
