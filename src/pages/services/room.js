@@ -57,7 +57,7 @@ export async function getRooms(bearer) {
     method: "GET",
     headers: headers,
   });
-  
+
   if (resp.ok) {
     return await resp.json();
   }
@@ -74,54 +74,56 @@ export async function leaveRoom(roomId, bearer) {
     method: "POST",
     headers: headers,
   });
-  
+
   if (resp.ok) {
     return await resp.json();
   }
 }
 
-export async function displayRoom(roomId, bearer){
+export async function displayRoom(roomId, bearer) {
   const url = `${config.API_URL}/rooms/${roomId}/calenders`;
   const headers = {
     Accept: "application/json",
     Authorization: "Bearer " + bearer,
   };
-  try{
+  try {
     const resp = await fetch(url, {
       method: "GET",
       headers: headers,
     });
     if (resp.ok) {
-     
-      let answer = await resp.json()
-      return answer
+      let answer = await resp.json();
+      return answer;
     }
-  }catch{
-    console.log("something went wrong..")
-  }}
-
+  } catch {
+    console.log("something went wrong..");
+  }
+}
 
 export async function getSuggestion(users, eventTime, bearer) {
-    console.log(users)
-    const userIds = Object.keys(users)
-    .map(id => `user_ids=${encodeURIComponent(id)}`)
+  console.log(users);
+  const userIds = Object.keys(users)
+    .map((id) => `user_ids=${encodeURIComponent(id)}`)
     .join("&");
 
-    const url = `${config.API_URL}/rooms/preference?${userIds}&event_time=${encodeURIComponent(eventTime)}`;
-    const headers = {
-      Accept: "application/json",
-      Authorization: "Bearer " + bearer,
-    };
-    try{
-      const resp = await fetch(url, {
-        method: "GET",
-        headers: headers,
-      });
-      if (resp.ok) {
-        let answer = await resp.json()
-        console.log(answer)
-        return answer
-      }
-    }catch{
-      console.log("something went wrong..")
-}}
+  const url = `${
+    config.API_URL
+  }/rooms/preference?${userIds}&event_time=${encodeURIComponent(eventTime)}`;
+  const headers = {
+    Accept: "application/json",
+    Authorization: "Bearer " + bearer,
+  };
+  try {
+    const resp = await fetch(url, {
+      method: "GET",
+      headers: headers,
+    });
+    if (resp.ok) {
+      let answer = await resp.json();
+      console.log(answer);
+      return answer;
+    }
+  } catch {
+    console.log("something went wrong..");
+  }
+}
