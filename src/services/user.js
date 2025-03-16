@@ -17,7 +17,7 @@ export async function RegisterUser(name, email) {
     redirect: "follow",
   };
 
-  let resp = await fetch(`${config.API_URL}/users`, requestOptions);
+  let resp = await fetch(`${config.API_URL}/users/`, requestOptions);
   let userId = await resp.json();
   console.log("user id is: " + userId);
 }
