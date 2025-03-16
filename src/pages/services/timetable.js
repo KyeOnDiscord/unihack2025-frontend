@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { getSuggestion } from "./room";
+import { toast } from "react-toastify";
 
 const localizer = momentLocalizer(moment);
-
 export function PeopleTeam16(props) {
   return (
     <svg
@@ -159,33 +160,127 @@ export function PeopleTeam16(props) {
   )
 }
 
+export const CustomToolbar = (toolbar) => {
+  return (
+    <div className="rbc-toolbar" style={{ marginBottom: "20px" }}>
+      {/* Navigation Buttons */}
+      <span className="rbc-btn-group">
+        <button
+          onClick={() => toolbar.onNavigate("PREV")}
+          style={buttonStyle}
+        >
+          ◀
+        </button>
+        <button
+          onClick={() => toolbar.onNavigate("TODAY")}
+          style={buttonStyle}
+        >
+          Today
+        </button>
+        <button
+          onClick={() => toolbar.onNavigate("NEXT")}
+          style={buttonStyle}
+        >
+          ▶
+        </button>
+      </span>
+
+      {/* View Label */}
+      <span
+        className="rbc-toolbar-label"
+        style={{
+          fontSize: "1.4em",
+          fontWeight: "600",
+          color: "#2c3e50",
+        }}
+      >
+        {toolbar.label}
+      </span>
+
+      {/* View Buttons (Month, Week, Day, Agenda) */}
+      <span className="rbc-btn-group">
+        <button
+          className={toolbar.view === "month" ? "active" : ""}
+          onClick={() => toolbar.onView("month")}
+          style={buttonStyle}
+        >
+          Month
+        </button>
+        <button
+          className={toolbar.view === "week" ? "active" : ""}
+          onClick={() => toolbar.onView("week")}
+          style={buttonStyle}
+        >
+          Week
+        </button>
+        <button
+          className={toolbar.view === "day" ? "active" : ""}
+          onClick={() => toolbar.onView("day")}
+          style={buttonStyle}
+        >
+          Day
+        </button>
+        <button
+          className={toolbar.view === "agenda" ? "active" : ""}
+          onClick={() => toolbar.onView("agenda")}
+          style={buttonStyle}
+        >
+          Agenda
+        </button>
+      </span>
+    </div>
+  );
+};
 
 function GroupCalendar({ free_times }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
+  const [suggested, setSuggested] = useState(null);
   const [view, setView] = useState("week");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const formattedEvents = free_times.map((event, index) => {
       let arr = Object.keys(event.free_users);
       let description_add = "";
+      let names = [];
       arr.forEach((id) => {
-        description_add += " " + event.free_users[id].name + ",";
+          names.push(event.free_users[id].name);
       });
+
+      if (names.length > 1) {
+          description_add += " " + names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+      } else {
+          description_add += " " + names[0];
+      }
       return {
         id: index + 1,
         title: event.summary,
         start: new Date(event.start_time_iso),
         end: new Date(event.end_time_iso),
         users: event.free_users,
-        description: "You have intersected free slots with: " + description_add,
+        description: "You have free time with: " + description_add,
       };
     });
     setEvents(formattedEvents);
   }, [free_times]);
 
+  useEffect(() => {
+    if (selectedEvent && selectedEvent.suggestion == null) {
+      toast.promise(
+        getSuggestion(selectedEvent.users, selectedEvent.start)
+          .then((data) => setSuggested(data.suggested_location)),
+        {
+          pending: "Asking AI for suggestions...",
+          success: "AI suggestions fetched!",
+          error: "Failed to fetch AI suggested events.",
+        }
+      );
+    } else {
+      setSuggested(null);
+    }
+  }, [selectedEvent]);
+
   const eventStyleGetter = (event) => {
-    console.log("event", event);
     const duration = moment(event.end).diff(moment(event.start), "minutes");
     const backgroundColor = duration > 120 ? "#22aa84ab" : "#3b82f633";
     const textColor = duration > 120 ? "#fff" : "#3b82f6";
@@ -201,78 +296,6 @@ function GroupCalendar({ free_times }) {
     };
   };
 
-  const CustomToolbar = (toolbar) => {
-    return (
-      <div className="rbc-toolbar" style={{ marginBottom: "20px" }}>
-        {/* Navigation Buttons */}
-        <span className="rbc-btn-group">
-          <button
-            onClick={() => toolbar.onNavigate("PREV")}
-            style={buttonStyle}
-          >
-            ◀
-          </button>
-          <button
-            onClick={() => toolbar.onNavigate("TODAY")}
-            style={buttonStyle}
-          >
-            Today
-          </button>
-          <button
-            onClick={() => toolbar.onNavigate("NEXT")}
-            style={buttonStyle}
-          >
-            ▶
-          </button>
-        </span>
-
-        {/* View Label */}
-        <span
-          className="rbc-toolbar-label"
-          style={{
-            fontSize: "1.4em",
-            fontWeight: "600",
-            color: "#2c3e50",
-          }}
-        >
-          {toolbar.label}
-        </span>
-
-        {/* View Buttons (Month, Week, Day, Agenda) */}
-        <span className="rbc-btn-group">
-          <button
-            className={toolbar.view === "month" ? "active" : ""}
-            onClick={() => toolbar.onView("month")}
-            style={buttonStyle}
-          >
-            Month
-          </button>
-          <button
-            className={toolbar.view === "week" ? "active" : ""}
-            onClick={() => toolbar.onView("week")}
-            style={buttonStyle}
-          >
-            Week
-          </button>
-          <button
-            className={toolbar.view === "day" ? "active" : ""}
-            onClick={() => toolbar.onView("day")}
-            style={buttonStyle}
-          >
-            Day
-          </button>
-          <button
-            className={toolbar.view === "agenda" ? "active" : ""}
-            onClick={() => toolbar.onView("agenda")}
-            style={buttonStyle}
-          >
-            Agenda
-          </button>
-        </span>
-      </div>
-    );
-  };
-
   return (
     <div className="flex justify-center mt-12">
       {/* Wrapper div for rounded white background */}
@@ -283,7 +306,7 @@ function GroupCalendar({ free_times }) {
           padding: "20px",
           boxShadow: "0 4px 10px rgba(0, 0, 0, 0.1)",
           width: "80vw",
-          maxWidth: "75vw",
+          maxWidth: "1200px",
         }}
       >
         {/* Calendar Component */}
@@ -292,7 +315,6 @@ function GroupCalendar({ free_times }) {
           events={events}
           view={view}
           onView={setView}
-          views={["month", "week", "day", "agenda"]}
           startAccessor="start"
           endAccessor="end"
           onSelectEvent={(event) => setSelectedEvent(event)}
@@ -300,8 +322,11 @@ function GroupCalendar({ free_times }) {
           components={{
             toolbar: CustomToolbar,
           }}
+          style={{ height: 650}}
           className="w-full"
-          style={{ height: 650 }}
+          defaultView="week"
+          min={new Date(2025, 2, 16, 8, 0)}
+          max={new Date(2025, 2, 16, 20, 0)}
         />
       </div>
       {/* Event Details Modal */}
@@ -328,15 +353,22 @@ function GroupCalendar({ free_times }) {
           
          
           <p className="text-sm text-gray-600">{selectedEvent.description}</p>
+        
           <p className="text-sm text-gray-600">
             {moment(selectedEvent.start).format("LLL")} -{" "}
             {moment(selectedEvent.end).format("LLL")}
           </p>
+          <div className="w-full">
+            <div className="w-full flex justify-center"><p>The best place to meet would be:</p></div>
+            <div className="w-full flex justify-center"><p>{suggested}</p></div>
+            
+          </div>
+           
           <div className="w-full flex justify-center">
           <button
             type="submit"
             onClick={() => setSelectedEvent(null)}
-            className="bg-[#232324;] shadow-[0px_0px_14px_-10px_rgba(0,0,0,1)] mt-4 px-4 py-2  text-white rounded-md"
+            className="bg-[#232324;] shadow-[1px_10px_27px_-5px_rgba(0,0,0,0.75)] mt-4 px-4 py-2  text-white rounded-md  shadow-"
           >
             Close
           </button>
@@ -364,7 +396,7 @@ function GroupCalendar({ free_times }) {
 }
 
 // Button styling for the toolbar
-const buttonStyle = {
+export const buttonStyle = {
   backgroundColor: "#f8f9fa",
   border: "1px solid #e0e0e0",
   borderRadius: "6px",
