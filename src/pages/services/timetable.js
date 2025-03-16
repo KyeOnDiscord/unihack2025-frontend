@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Calendar, momentLocalizer } from "react-big-calendar";
 import moment from "moment";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import { toast } from "react-toastify";
+import { getSuggestion } from "./room";
 
 const localizer = momentLocalizer(moment);
 
@@ -164,8 +166,9 @@ function GroupCalendar({ free_times }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
   const [view, setView] = useState("week");
+  const [suggested, setSuggested] = useState("");
 
-  React.useEffect(() => {
+  useEffect(() => {
     const formattedEvents = free_times.map((event, index) => {
       let arr = Object.keys(event.free_users);
       let description_add = "";
@@ -190,6 +193,22 @@ function GroupCalendar({ free_times }) {
     });
     setEvents(formattedEvents);
   }, [free_times]);
+
+  useEffect(() => {
+    if (selectedEvent && selectedEvent.suggestion == null) {
+      toast.promise(
+        getSuggestion(selectedEvent.users, selectedEvent.start)
+          .then((data) => setSuggested(data.suggested_location)),
+        {
+          pending: "Asking AI for suggestions...",
+          success: "AI suggestions fetched!",
+          error: "Failed to fetch AI suggested events.",
+        }
+      );
+    } else {
+      setSuggested(null);
+    }
+  }, [selectedEvent]);
 
   const eventStyleGetter = (event) => {
     console.log("event", event);
@@ -309,6 +328,9 @@ function GroupCalendar({ free_times }) {
           }}
           className="w-full"
           style={{ height: 650 }}
+          defaultView="week"
+          min={new Date(2025, 2, 16, 8, 0)}
+          max={new Date(2025, 2, 16, 20, 0)}
         />
       </div>
       {/* Event Details Modal */}
@@ -335,6 +357,7 @@ function GroupCalendar({ free_times }) {
           
          
           <p className="text-sm text-gray-600">{selectedEvent.description}</p>
+          <p className="text-sm text-gray-600">Recommendation: {suggested}</p>
           <p className="text-sm text-gray-600">
             {moment(selectedEvent.start).format("LLL")} -{" "}
             {moment(selectedEvent.end).format("LLL")}
