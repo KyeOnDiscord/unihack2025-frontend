@@ -355,7 +355,7 @@ function GroupCalendar({ free_times }) {
           </p>
           <div className="w-full">
             <div className="w-full flex justify-center">
-              <p>The best place to meet would be:</p>
+              <p>The best place & activity would be:</p>
             </div>
             <div className="w-full flex justify-center">
               <p>{suggested}</p>
