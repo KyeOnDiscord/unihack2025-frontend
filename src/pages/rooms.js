@@ -73,17 +73,11 @@ export default function RoomsPage() {
       error: 'Failed to create the room. Please try again. ❌',
     });
   };
-  const visitRoom = async (e) => {
-    toast.promise(async () => {
-      let response = await RoomService.displayRoom(e, localStorage.getItem("JWT_TOKEN"))
-      setGroupTable(response)
-      setGroupRoom(true)
-      console.log('response, ',response)
-    }, {
-      pending: 'Visiting room...',
-      success: 'Welcome! 📆',
-      error: 'Failed to fetch room data. Please try again. ❌',
-    });
+  var visitRoom = async (e) => {
+    let response = await RoomService.displayRoom(e, localStorage.getItem("JWT_TOKEN"))
+    setGroupTable(response)
+    setGroupRoom(true)
+    console.log('response, ',response)
   };
 
   const leaveRoom = async (roomId) => {
