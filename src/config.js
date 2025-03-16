@@ -3,7 +3,7 @@ API_URL = null;
 if (process.env.NODE_ENV === "development") {
   API_URL = "http://127.0.0.1:8000";
 } else if (process.env.NODE_ENV === "production") {
-  API_URL = "https://example.com";
+  API_URL = "http://209.38.93.77:8000";
 }
 module.exports = {
   API_URL,
