@@ -348,7 +348,6 @@ function GroupCalendar({ free_times }) {
           </h3>
 
           <p className="text-sm text-gray-600">{selectedEvent.description}</p>
-          <p className="text-sm text-gray-600">Recommendation: {suggested}</p>
           <p className="text-sm text-gray-600">
             {moment(selectedEvent.start).format("LLL")} -{" "}
             {moment(selectedEvent.end).format("LLL")}
