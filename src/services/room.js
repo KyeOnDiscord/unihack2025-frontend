@@ -1,4 +1,4 @@
-import * as config from "../../config";
+import * as config from "../config";
 
 export async function joinRoom(roomCode, bearer) {
   const url = `${config.API_URL}/rooms/${roomCode}/join`;

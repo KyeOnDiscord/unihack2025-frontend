@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import * as UserService from "./services/user";
+import * as UserService from "../services/user";
 import { toast } from "react-toastify";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
@@ -183,11 +183,7 @@ export default function Home() {
       <section className="py-16 ">
         <div className="max-w-7xl mx-auto px-6 space-y-5 text-center">
           <h2 className="text-3xl font-semibold mb-6">
-            {loadedUserdata == true && (
-              <>
-                Welcome {displayName}
-              </>
-            )}
+            {loadedUserdata == true && <>Welcome {displayName}</>}
             <a href={"/rooms"}>
               <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
                 See Rooms

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import * as config from "../config";
-import * as UserService from "./services/user";
+import * as UserService from "../services/user";
 
 export default function LoginForm() {
   const [email, setFormData] = useState("");

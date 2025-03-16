@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import * as config from "../config";
-import * as RoomService from "./services/room";
+import * as RoomService from "../services/room";
 import { toast } from "react-toastify";
-import GroupCalendar from "./services/timetable";
+import GroupCalendar from "../services/timetable";
 
 export default function RoomsPage() {
   const [roomCode, setRoomCode] = useState("");
@@ -74,16 +74,22 @@ export default function RoomsPage() {
     });
   };
   const visitRoom = async (e) => {
-    toast.promise(async () => {
-      let response = await RoomService.displayRoom(e, localStorage.getItem("JWT_TOKEN"))
-      setGroupTable(response)
-      setGroupRoom(true)
-      console.log('response, ',response)
-    }, {
-      pending: 'Visiting room...',
-      success: 'Welcome! 📆',
-      error: 'Failed to fetch room data. Please try again. ❌',
-    });
+    toast.promise(
+      async () => {
+        let response = await RoomService.displayRoom(
+          e,
+          localStorage.getItem("JWT_TOKEN")
+        );
+        setGroupTable(response);
+        setGroupRoom(true);
+        console.log("response, ", response);
+      },
+      {
+        pending: "Visiting room...",
+        success: "Welcome! 📆",
+        error: "Failed to fetch room data. Please try again. ❌",
+      }
+    );
   };
 
   const leaveRoom = async (roomId) => {

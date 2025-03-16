@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Geist, Geist_Mono } from "next/font/google";
 import { useState, useEffect } from "react";
-import * as UserService from "./services/user";
+import * as UserService from "../services/user";
 import { toast } from "react-toastify";
 
 function getEmailFromJWT(token) {
