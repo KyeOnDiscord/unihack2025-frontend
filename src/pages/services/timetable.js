@@ -5,6 +5,78 @@ import "react-big-calendar/lib/css/react-big-calendar.css";
 
 const localizer = momentLocalizer(moment);
 
+export const CustomToolbar = (toolbar) => {
+  return (
+    <div className="rbc-toolbar" style={{ marginBottom: "20px" }}>
+      {/* Navigation Buttons */}
+      <span className="rbc-btn-group">
+        <button
+          onClick={() => toolbar.onNavigate("PREV")}
+          style={buttonStyle}
+        >
+          ◀
+        </button>
+        <button
+          onClick={() => toolbar.onNavigate("TODAY")}
+          style={buttonStyle}
+        >
+          Today
+        </button>
+        <button
+          onClick={() => toolbar.onNavigate("NEXT")}
+          style={buttonStyle}
+        >
+          ▶
+        </button>
+      </span>
+
+      {/* View Label */}
+      <span
+        className="rbc-toolbar-label"
+        style={{
+          fontSize: "1.4em",
+          fontWeight: "600",
+          color: "#2c3e50",
+        }}
+      >
+        {toolbar.label}
+      </span>
+
+      {/* View Buttons (Month, Week, Day, Agenda) */}
+      <span className="rbc-btn-group">
+        <button
+          className={toolbar.view === "month" ? "active" : ""}
+          onClick={() => toolbar.onView("month")}
+          style={buttonStyle}
+        >
+          Month
+        </button>
+        <button
+          className={toolbar.view === "week" ? "active" : ""}
+          onClick={() => toolbar.onView("week")}
+          style={buttonStyle}
+        >
+          Week
+        </button>
+        <button
+          className={toolbar.view === "day" ? "active" : ""}
+          onClick={() => toolbar.onView("day")}
+          style={buttonStyle}
+        >
+          Day
+        </button>
+        <button
+          className={toolbar.view === "agenda" ? "active" : ""}
+          onClick={() => toolbar.onView("agenda")}
+          style={buttonStyle}
+        >
+          Agenda
+        </button>
+      </span>
+    </div>
+  );
+};
+
 function GroupCalendar({ free_times }) {
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
@@ -44,78 +116,6 @@ function GroupCalendar({ free_times }) {
         boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
       },
     };
-  };
-
-  const CustomToolbar = (toolbar) => {
-    return (
-      <div className="rbc-toolbar" style={{ marginBottom: "20px" }}>
-        {/* Navigation Buttons */}
-        <span className="rbc-btn-group">
-          <button
-            onClick={() => toolbar.onNavigate("PREV")}
-            style={buttonStyle}
-          >
-            ◀
-          </button>
-          <button
-            onClick={() => toolbar.onNavigate("TODAY")}
-            style={buttonStyle}
-          >
-            Today
-          </button>
-          <button
-            onClick={() => toolbar.onNavigate("NEXT")}
-            style={buttonStyle}
-          >
-            ▶
-          </button>
-        </span>
-
-        {/* View Label */}
-        <span
-          className="rbc-toolbar-label"
-          style={{
-            fontSize: "1.4em",
-            fontWeight: "600",
-            color: "#2c3e50",
-          }}
-        >
-          {toolbar.label}
-        </span>
-
-        {/* View Buttons (Month, Week, Day, Agenda) */}
-        <span className="rbc-btn-group">
-          <button
-            className={toolbar.view === "month" ? "active" : ""}
-            onClick={() => toolbar.onView("month")}
-            style={buttonStyle}
-          >
-            Month
-          </button>
-          <button
-            className={toolbar.view === "week" ? "active" : ""}
-            onClick={() => toolbar.onView("week")}
-            style={buttonStyle}
-          >
-            Week
-          </button>
-          <button
-            className={toolbar.view === "day" ? "active" : ""}
-            onClick={() => toolbar.onView("day")}
-            style={buttonStyle}
-          >
-            Day
-          </button>
-          <button
-            className={toolbar.view === "agenda" ? "active" : ""}
-            onClick={() => toolbar.onView("agenda")}
-            style={buttonStyle}
-          >
-            Agenda
-          </button>
-        </span>
-      </div>
-    );
   };
 
   return (
@@ -204,7 +204,7 @@ function GroupCalendar({ free_times }) {
 }
 
 // Button styling for the toolbar
-const buttonStyle = {
+export const buttonStyle = {
   backgroundColor: "#f8f9fa",
   border: "1px solid #e0e0e0",
   borderRadius: "6px",

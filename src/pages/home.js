@@ -3,6 +3,7 @@ import * as UserService from "./services/user";
 import { toast } from "react-toastify";
 
 import { Calendar, momentLocalizer } from "react-big-calendar";
+import { CustomToolbar } from "./services/timetable";
 import moment from "moment";
 
 const localizer = momentLocalizer(moment);
@@ -131,27 +132,31 @@ export default function Home() {
   const style = { backgroundColor: "#004185" };
 
   const eventPropGetter = (event) => {
+    const duration = moment(event.end).diff(moment(event.start), "minutes");
+    const backgroundColor = duration > 120 ? "#22aa84ab" : "#3b82f633";
+    const textColor = duration > 120 ? "#fff" : "#3b82f6";
     let style = {
-      color: "white",
-      fontWeight: "bold",
-      fontSize: "12px",
-      padding: "5px",
-      fontFamily: "Arial",
+      backgroundColor,
+      borderRadius: "4px",
+      border: "none",
+      color: textColor,
+      fontSize: "0.9em",
+      boxShadow: "0 2px 5px rgba(0,0,0,0.1)",
     };
 
     // Apply styles based on event title
     if (event.title.includes("Seminar")) {
-      style.backgroundColor = "#4CAF50";
-      style.border = "2px solid #388E3C";
+      style.backgroundColor = "#facc15"; // Yellow
+      style.color = "#000"; // Black text for contrast
     } else if (event.title.includes("Applied")) {
-      style.backgroundColor = "#2196F3";
-      style.border = "2px solid #1976D2";
+      style.backgroundColor = "#ec4899"; // Pink
+      style.color = "#fff"; // White text for contrast
     } else if (event.title.includes("Workshop")) {
-      style.backgroundColor = "#FF9800";
-      style.border = "2px solid #F57C00";
+      style.backgroundColor = "#6366f1"; // Indigo
+      style.color = "#fff"; // White text for contrast
     } else {
-      style.backgroundColor = "#607D8B";
-      style.border = "2px solid #455A64";
+      style.backgroundColor = "#94a3b8"; // Slate gray for general events
+      style.color = "#000"; // Black text for contrast
     }
 
     return {
@@ -186,20 +191,20 @@ export default function Home() {
             {loadedUserdata == true && (
               <>
                 Welcome {displayName}
-                <a href={"/rooms"}>
-                  <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
-                    See Rooms
-                  </button>
-                </a>
-                <button
-                  type="submit"
-                  onClick={handleSignOut}
-                  className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
-                >
-                  Sign Out
-                </button>
               </>
             )}
+            <a href={"/rooms"}>
+              <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                See Rooms
+              </button>
+            </a>
+            <button
+              type="submit"
+              onClick={handleSignOut}
+              className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+            >
+              Sign Out
+            </button>
           </h2>
 
           <div className="flex justify-center mt-12">
@@ -212,6 +217,9 @@ export default function Home() {
               className="w-full"
               defaultView="week"
               style={{ height: 800 }}
+              components={{
+                toolbar: CustomToolbar,
+              }}
               eventPropGetter={eventPropGetter}
               min={new Date(2025, 2, 16, 8, 0)}
               max={new Date(2025, 2, 16, 20, 0)}
@@ -219,28 +227,34 @@ export default function Home() {
             {/* Popup Modal */}
             {selectedEvent && (
               <div
-                style={{
-                  position: "fixed",
-                  top: "50%",
-                  left: "50%",
-                  transform: "translate(-50%, -50%)",
-                  backgroundColor: "white",
-                  padding: "20px",
-                  borderRadius: "10px",
-                  boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
-                  zIndex: 1000,
-                }}
-              >
-                <h3>{selectedEvent.title}</h3>
-                <p>{selectedEvent.description}</p>
-                <p>
-                  {moment(selectedEvent.start).format("LLL")} -{" "}
-                  {moment(selectedEvent.end).format("LLL")}
-                </p>
-                <button type="submit" onClick={() => setSelectedEvent(null)}>
-                  Close
-                </button>
-              </div>
+                        className="bg-gradient-to-r from-teal-200 to-teal-500 text-white"
+                        style={{
+                          position: "fixed",
+                          top: "50%",
+                          left: "50%",
+                          transform: "translate(-50%, -50%)",
+                          padding: "20px",
+                          borderRadius: "10px",
+                          boxShadow: "0px 0px 10px rgba(0, 0, 0, 0.1)",
+                          zIndex: 1000,
+                        }}
+                      >
+                        <h3 className="text-lg font-semibold w-full text-center">
+                          {selectedEvent.title}
+                        </h3>
+                        <p className="text-sm text-gray-600">{selectedEvent.description}</p>
+                        <p className="text-sm text-gray-600">
+                          {moment(selectedEvent.start).format("LLL")} -{" "}
+                          {moment(selectedEvent.end).format("LLL")}
+                        </p>
+                        <button
+                          type="submit"
+                          onClick={() => setSelectedEvent(null)}
+                          className="  mt-4 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition"
+                        >
+                          Close
+                        </button>
+                      </div>
             )}
 
             {/* Overlay to close modal when clicking outside */}
