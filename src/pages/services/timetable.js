@@ -169,16 +169,23 @@ function GroupCalendar({ free_times }) {
     const formattedEvents = free_times.map((event, index) => {
       let arr = Object.keys(event.free_users);
       let description_add = "";
+      let names = [];
       arr.forEach((id) => {
-        description_add += " " + event.free_users[id].name + ",";
+          names.push(event.free_users[id].name);
       });
+
+      if (names.length > 1) {
+          description_add += " " + names.slice(0, -1).join(", ") + " and " + names[names.length - 1];
+      } else {
+          description_add += " " + names[0];
+      }
       return {
         id: index + 1,
         title: event.summary,
         start: new Date(event.start_time_iso),
         end: new Date(event.end_time_iso),
         users: event.free_users,
-        description: "You have intersected free slots with: " + description_add,
+        description: "You have free time with: " + description_add,
       };
     });
     setEvents(formattedEvents);
