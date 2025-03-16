@@ -186,20 +186,20 @@ export default function Home() {
             {loadedUserdata == true && (
               <>
                 Welcome {displayName}
-                <a href={"/rooms"}>
-                  <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
-                    See Rooms
-                  </button>
-                </a>
-                <button
-                  type="submit"
-                  onClick={handleSignOut}
-                  className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
-                >
-                  Sign Out
-                </button>
               </>
             )}
+            <a href={"/rooms"}>
+              <button className="bg-blue-500 text-white mx-10 px-6 py-3 rounded-full hover:bg-blue-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg">
+                See Rooms
+              </button>
+            </a>
+            <button
+              type="submit"
+              onClick={handleSignOut}
+              className="bg-red-500 text-white px-6 py-3 rounded-full hover:bg-red-600 transform hover:scale-105 transition-all duration-300 ease-in-out shadow-lg"
+            >
+              Sign Out
+            </button>
           </h2>
 
           <div className="flex justify-center mt-12">
