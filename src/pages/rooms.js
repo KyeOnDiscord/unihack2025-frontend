@@ -110,6 +110,12 @@ export default function RoomsPage() {
 
   return (
     <div className="bg-gradient-to-r from-blue-200 to-cyan-200">
+      <a href="/home">
+      <button type="submit" class="bg-gray-800 text-white px-4 py-2 hover:bg-blue-600 transition-colors" style={{marginLeft: 10, marginTop: 10, borderRadius: 5}}>Home</button>
+      </a>
+      <a href="/rooms">
+      <button type="submit" class="bg-gray-800 text-white px-4 py-2 hover:bg-blue-600 transition-colors" style={{marginLeft: 10, marginTop: 10, borderRadius: 5}}>Rooms</button>
+      </a>
       <div className="flex justify-center items-center min-h-screen ">
         {!displayGroupRoom && (
           <div className="w-full max-w-md p-8 space-y-6 bg-white rounded-xl shadow-lg">
