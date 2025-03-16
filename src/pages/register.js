@@ -1,7 +1,7 @@
 import { useState } from "react";
 import * as config from "../config";
-import * as UserService from "./services/user";
-import { toast } from 'react-toastify';
+import * as UserService from "../services/user";
+import { toast } from "react-toastify";
 
 console.log(UserService);
 export default function SignUpForm() {
@@ -24,11 +24,19 @@ export default function SignUpForm() {
     // Handle form submission (e.g., send data to API)
     // console.log(formData);
     // console.log(config.API_URL);
-    toast.promise(UserService.RegisterUser(formData.displayName, formData.email),
-      { 
-        pending: 'Registering...',
-        success: { render: 'A verification email was sent to your inbox 📩, please click it!', delay: 100 },
-        error: { render: 'There was an issue while registering. 😭', delay: 100 },
+    toast.promise(
+      UserService.RegisterUser(formData.displayName, formData.email),
+      {
+        pending: "Registering...",
+        success: {
+          render:
+            "A verification email was sent to your inbox 📩, please click it!",
+          delay: 100,
+        },
+        error: {
+          render: "There was an issue while registering. 😭",
+          delay: 100,
+        },
       }
     );
   };

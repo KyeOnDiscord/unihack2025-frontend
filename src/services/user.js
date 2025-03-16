@@ -1,4 +1,4 @@
-import * as config from "../../config";
+import * as config from "../config";
 
 export async function RegisterUser(name, email) {
   const raw = JSON.stringify({
