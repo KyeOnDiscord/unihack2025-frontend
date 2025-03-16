@@ -307,7 +307,7 @@ function GroupCalendar({ free_times }) {
       {/* Event Details Modal */}
       {selectedEvent && (
         <div
-          className=" bg-white text-black shadow-[0px_10px_11px_10px_rgba(0,0,0,1)]"
+          className=" bg-white text-black shadow-[0_35px_60px_-15px_rgba(0,0,0,0.3)]"
           style={{
             position: "fixed",
             top: "50%",
@@ -336,7 +336,7 @@ function GroupCalendar({ free_times }) {
           <button
             type="submit"
             onClick={() => setSelectedEvent(null)}
-            className="bg-[#232324;] shadow-[0px_10px_11px_-10px_rgba(0,0,0,1)] mt-4 px-4 py-2  text-white rounded-md"
+            className="bg-[#232324;] shadow-[0px_0px_14px_-10px_rgba(0,0,0,1)] mt-4 px-4 py-2  text-white rounded-md"
           >
             Close
           </button>
